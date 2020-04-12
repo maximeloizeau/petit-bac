@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import React from "react";
+import { useDispatch } from "react-redux";
 import styles from "./home.module.css";
+import { createNewGame } from "../../actions/game";
 
 export function Home() {
-  let { gameId } = useParams();
+  const dispatch = useDispatch();
+
   return (
     <div className="Container-home">
       <h1>Créer une nouvelle partie</h1>
-      <Link to={`/game/1234/lobby`}><button className="Primary">nouvelle partie</button></Link>
+      <button className="Primary" onClick={() => dispatch(createNewGame())}>
+        nouvelle partie
+      </button>
     </div>
   );
 }

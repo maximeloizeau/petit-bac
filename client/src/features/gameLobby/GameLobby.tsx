@@ -45,11 +45,11 @@ export function GameLobby() {
         </div>
         <div className="subBox">
           <label>Categories</label>
-          <span>6</span>
+          <span>{game.categories.length}</span>
         </div>
         <div className="subBox">
           <label>Temps</label>
-          <span>30s</span>
+          <span>{game.rules.roundDuration}s</span>
         </div>
       </div>
       <div className={styles.players}>

@@ -14,6 +14,26 @@ export const categories: Category[] = [
     id: "jobs",
     name: "Metiers",
   },
+  {
+    id: "brands",
+    name: "Marques",
+  },
+  {
+    id: "fleurs",
+    name: "Flowers",
+  },
+  {
+    id: "objects",
+    name: "Objects",
+  },
+  {
+    id: "historical-event",
+    name: "Evenement historique",
+  },
+  {
+    id: "male-name",
+    name: "Prenom masculin",
+  },
 ];
 
 export interface Category {
@@ -83,7 +103,7 @@ export interface Game {
 
 export type PublicGame = Pick<
   Game,
-  "id" | "state" | "categories" | "players" | "creator"
+  "id" | "state" | "categories" | "players" | "creator" | "rules"
 >;
 
 export function toPublicGame(game: Game): PublicGame {
@@ -93,6 +113,7 @@ export function toPublicGame(game: Game): PublicGame {
     categories: game.categories,
     players: game.players,
     creator: game.creator,
+    rules: game.rules,
   };
 }
 

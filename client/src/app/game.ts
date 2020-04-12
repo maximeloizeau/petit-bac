@@ -1,9 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "./store";
-
-interface PublicGame {
-  id: string;
-}
+import { PublicGame } from "../../../server/src/models/Game";
 
 interface GameState {
   gameLoading: boolean;

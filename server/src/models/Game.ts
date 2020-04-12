@@ -64,13 +64,17 @@ export interface Game {
   creator: Player;
 }
 
-export type PublicGame = Pick<Game, "id" | "state" | "categories" | "players">;
+export type PublicGame = Pick<
+  Game,
+  "id" | "state" | "categories" | "players" | "creator"
+>;
 
-export function toPublicGame(game: Game) {
+export function toPublicGame(game: Game): PublicGame {
   return {
     id: game.id,
     state: game.state,
     categories: game.categories,
     players: game.players,
+    creator: game.creator,
   };
 }

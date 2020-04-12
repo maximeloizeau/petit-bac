@@ -4,10 +4,12 @@ import styles from "./GameLobby.module.css";
 import "../../App.css";
 import { sendAction } from "../../websocket";
 import { useSelector, useDispatch } from "react-redux";
-import { selectGame } from "../../app/game";
+import { selectGame, selectPlayerId } from "../../app/game";
+import { startGame } from "../../actions/game";
 
 export function GameLobby() {
   let { gameId } = useParams();
+  const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
   const dispatch = useDispatch();
 
@@ -17,6 +19,11 @@ export function GameLobby() {
 
   if (!game) {
     return <h1>"Loading"</h1>;
+  }
+
+  if (gameId !== game.id) {
+    alert("Wrong game id");
+    return <div>"Invalid state"</div>;
   }
 
   const numberOfSlots = 8;
@@ -60,9 +67,11 @@ export function GameLobby() {
           );
         })}
       </div>
-      <Link to={`/game/${gameId}/round`}>
-        <button className="Primary">Commencer la partie</button>
-      </Link>
+      {playerId !== game.creator.id ? undefined : (
+        <button className="Primary" onClick={() => dispatch(startGame())}>
+          Commencer la partie
+        </button>
+      )}
     </div>
   );
 }

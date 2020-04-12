@@ -3,11 +3,13 @@ import { AppThunk, RootState } from "./store";
 import { PublicGame } from "../../../server/src/models/Game";
 
 interface GameState {
+  playerId?: string;
   gameLoading: boolean;
   currentGame?: PublicGame;
 }
 
 const initialState: GameState = {
+  playerId: undefined,
   gameLoading: false,
   currentGame: undefined,
 };
@@ -16,6 +18,9 @@ export const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
+    setPlayerId: (state, action: PayloadAction<string>) => {
+      state.playerId = action.payload;
+    },
     setGameLoading: (state, action: PayloadAction<boolean>) => {
       state.gameLoading = action.payload;
     },
@@ -25,7 +30,7 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { setGame } = gameSlice.actions;
+export const { setGame, setPlayerId } = gameSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -42,5 +47,6 @@ export const { setGame } = gameSlice.actions;
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectGame = (state: RootState) => state.game.currentGame;
 export const selectGameLoading = (state: RootState) => state.game.gameLoading;
+export const selectPlayerId = (state: RootState) => state.game.playerId;
 
 export default gameSlice.reducer;

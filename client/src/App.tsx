@@ -25,6 +25,7 @@ class App extends React.Component {
               <Route path="/" component={Home} />
             </Switch>
           </div>
+          <footer>© 2020 Julia Dirand & Maxime Loizeau. All Rights Reserved.</footer>
         </div>
       </Router>
     );

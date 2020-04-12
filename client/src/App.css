@@ -47,7 +47,8 @@
 
 .container {
   margin: auto;
-  padding: 10%;
+  padding: 5% 10% 5% 10%;
+
 }
 
 h1 {
@@ -235,4 +236,11 @@ label {
   display: flex;
   color: #4451F5;
   font-weight: bold;
+}
+
+
+footer {
+  text-align: center;
+  padding: 20px; 
+  color: white;
 }

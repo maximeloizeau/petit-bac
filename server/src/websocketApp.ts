@@ -22,6 +22,18 @@ export default function websocketApp(server: Server) {
       .to(game.id)
       .emit("event", { event: "roundstarted", game, round })
   );
+  gameEventEmitter.on("roundended", (game: PublicGame, round: Round) =>
+    websocketServer
+      .to(game.id)
+      .emit("event", { event: "roundended", game, round })
+  );
+  gameEventEmitter.on(
+    "roundtimerupdate",
+    (game: PublicGame, timerValue: number) =>
+      websocketServer
+        .to(game.id)
+        .emit("event", { event: "roundtimerupdate", timerValue })
+  );
 }
 
 function connectionHandler(socket: Socket) {

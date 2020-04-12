@@ -4,6 +4,7 @@ import {
   toPublicGame,
   GameState,
   toPublicRound,
+  Round,
 } from "../models/Game";
 import { gameEventEmitter } from "./gameEventEmitter";
 
@@ -57,9 +58,37 @@ export const startNextRound = async (gameId: string) => {
     throw new Error("No more rounds to play");
   }
 
+  nextRound.started = true;
+
   gameEventEmitter.emit(
     "roundstarted",
     toPublicGame(game),
     toPublicRound(nextRound)
   );
+
+  let timerValue = game.rules.roundDuration;
+  const timerSchedule: NodeJS.Timeout = setInterval(() => {
+    if (timerValue <= 0) {
+      closeRound(gameId, nextRound.id);
+      clearInterval(timerSchedule);
+    }
+
+    gameEventEmitter.emit("roundtimerupdate", toPublicGame(game), --timerValue);
+  }, 1000);
+};
+
+export const closeRound = async (gameId: string, roundId: string) => {
+  const game = games.get(gameId);
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  const round = game.rounds.find((round) => round.id === roundId);
+  if (!round) {
+    throw new Error("Round does not exist");
+  }
+
+  round.ended = true;
+
+  gameEventEmitter.emit("roundended", toPublicGame(game), toPublicRound(round));
 };

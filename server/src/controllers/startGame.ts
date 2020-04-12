@@ -17,15 +17,6 @@ export async function startGameController(
   }
 
   await startGame(gameId);
-
-  const socketData = await getSocketFromPlayerId(player.id);
-  if (!socketData) {
-    console.error("Unable to join");
-    return;
-  }
-
-  socketData.socket.join(gameId);
-  await addPlayer(gameId, player);
 }
 
 function isValidStart(gameInfo: Game | undefined, player: Player) {

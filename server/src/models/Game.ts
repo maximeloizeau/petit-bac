@@ -1,5 +1,5 @@
 export const defaultRules = {
-  roundDuration: 90,
+  roundDuration: 15,
   roundCount: 5,
   categoriesCount: 2,
   playerLimit: 8,
@@ -86,7 +86,7 @@ export interface Round {
   };
 }
 
-export type PublicRound = Pick<Round, "id" | "letter">;
+export type PublicRound = Pick<Round, "id" | "letter" | "started" | "ended">;
 
 export interface Game {
   id: string;
@@ -118,5 +118,10 @@ export function toPublicGame(game: Game): PublicGame {
 }
 
 export function toPublicRound(round: Round): PublicRound {
-  return { id: round.id, letter: round.letter };
+  return {
+    id: round.id,
+    letter: round.letter,
+    started: round.started,
+    ended: round.ended,
+  };
 }

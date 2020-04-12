@@ -8,21 +8,21 @@ export function GameRound() {
   return (
     <div className="">
       <h1>Game {gameId}</h1>
-      <div className={styles.twoBoxes}>
-        <div className={` ${styles.boxOne} box `}>
+      <div className="twoBoxes">
+        <div className="boxOne box">
           <div className="subBox center">
             <label>Lettre</label>
             <span>A</span>
           </div>
         </div>
-        <div className={` ${styles.boxTwo} box `}>
+        <div className="boxTwo box">
           <div className="subBox center">
             <label>Temps</label>
             <span>30:00</span>
           </div>
         </div>
       </div>
-      <div className={styles.formAnswers}>
+      <div className="form">
         <label>Categorie 1</label>
         <input></input>
         <label>Categorie 1</label>

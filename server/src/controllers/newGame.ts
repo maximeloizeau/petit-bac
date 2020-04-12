@@ -45,8 +45,8 @@ export async function newGameController(player: Player, data: {}) {
     state: GameState.WaitingLobby,
     categories: selectedCategories,
     rounds,
-    players: [],
-    creator: player,
+    playerIds: [],
+    creatorId: player.id,
     scoreboard: {},
     rules,
   };

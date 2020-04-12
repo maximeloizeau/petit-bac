@@ -33,7 +33,7 @@ function isValidJoin(gameInfo: Game | undefined, player: Player) {
   }
 
   const alreadyParticipant = Boolean(
-    gameInfo.players.find((p: Player) => p.id === player.id)
+    gameInfo.playerIds.find((playerId: string) => playerId === player.id)
   );
   if (alreadyParticipant) {
     return true;
@@ -41,7 +41,7 @@ function isValidJoin(gameInfo: Game | undefined, player: Player) {
 
   if (
     gameInfo.state === GameState.WaitingLobby &&
-    gameInfo.players.length < gameInfo.rules.playerLimit
+    gameInfo.playerIds.length < gameInfo.rules.playerLimit
   ) {
     return true;
   }

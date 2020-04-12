@@ -1,9 +1,6 @@
 import { Socket } from "socket.io";
 
-const socketStorage = new Map<
-  string,
-  { socket: Socket; playerName?: string; playerId?: string }
->();
+const socketStorage = new Map<string, { socket: Socket; playerId?: string }>();
 const playerIdToSocketId = new Map<string, string>();
 
 const getSocketFromId = async (socketId: string) => socketStorage.get(socketId);
@@ -20,7 +17,6 @@ const getSocketFromPlayerId = async (playerId: string) => {
 const registerSocket = async (socketId: string, socket: Socket) => {
   socketStorage.set(socketId, {
     socket,
-    playerName: undefined,
     playerId: undefined,
   });
 
@@ -37,18 +33,13 @@ const unregisterSocket = async (socketId: string) => {
   return true;
 };
 
-const setUserInfo = async (
-  socketId: string,
-  playerId: string,
-  playerName?: string
-) => {
+const setUserInfo = async (socketId: string, playerId: string) => {
   const socketData = socketStorage.get(socketId);
   if (!socketData) {
     return false;
   }
 
   socketData.playerId = playerId;
-  socketData.playerName = playerName;
 
   playerIdToSocketId.set(playerId, socketId);
 

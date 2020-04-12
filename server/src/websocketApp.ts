@@ -1,6 +1,10 @@
 import socketIo, { Socket } from "socket.io";
 import { Server } from "http";
-import { registerSocket, unregisterSocket } from "./services/socketStorage";
+import {
+  registerSocket,
+  unregisterSocket,
+  getSocketFromId,
+} from "./services/socketStorage";
 import { loginController } from "./controllers/login";
 import { newGameController } from "./controllers/newGame";
 import { socketToPlayer } from "./utils/socketToPlayer";
@@ -9,6 +13,7 @@ import { gameEventEmitter } from "./services/gameEventEmitter";
 import { Game, PublicGame, Round, PublicRound } from "./models/Game";
 import { startGameController } from "./controllers/startGame";
 import { submitAnswersController } from "./controllers/submitAnswers";
+import { disconnectPlayer } from "./controllers/disconnectPlayer";
 
 export default function websocketApp(server: Server) {
   const websocketServer = socketIo(server);
@@ -42,7 +47,7 @@ export default function websocketApp(server: Server) {
   );
 }
 
-function connectionHandler(socket: Socket) {
+async function connectionHandler(socket: Socket) {
   console.log("connected");
 
   registerSocket(socket.id, socket);
@@ -51,8 +56,11 @@ function connectionHandler(socket: Socket) {
   socket.on("disconnect", (data) => disconnectHandler(socket.id, data));
 }
 
-function disconnectHandler(socketId: string, data: any) {
+async function disconnectHandler(socketId: string, data: any) {
   console.log("disconnect", data);
+
+  const socket = await getSocketFromId(socketId);
+  socket && socket.playerId && disconnectPlayer(socket.playerId);
 
   unregisterSocket(socketId);
 }

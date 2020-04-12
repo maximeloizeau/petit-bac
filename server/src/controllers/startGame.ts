@@ -25,14 +25,14 @@ function isValidStart(gameInfo: Game | undefined, player: Player) {
     return false;
   }
 
-  if (gameInfo.creator.id !== player.id) {
+  if (gameInfo.creatorId !== player.id) {
     console.info("Only creator can start game");
     return false;
   }
 
   if (
     gameInfo.state === GameState.WaitingLobby &&
-    gameInfo.players.length > 0
+    gameInfo.playerIds.length > 0
   ) {
     return true;
   }

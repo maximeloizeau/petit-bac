@@ -4,7 +4,6 @@ import {
   toPublicGame,
   GameState,
   toPublicRound,
-  Round,
 } from "../models/Game";
 import { gameEventEmitter } from "./gameEventEmitter";
 
@@ -25,12 +24,12 @@ export const addPlayer = async (gameId: string, player: Player) => {
     throw new Error("Game does not exist");
   }
 
-  if (game.players.find((p) => p.id === player.id)) {
+  if (game.playerIds.find((playerId: string) => playerId === player.id)) {
     gameEventEmitter.emit("gameupdate", toPublicGame(game));
     return game;
   }
 
-  game.players.push(player);
+  game.playerIds.push(player.id);
 
   gameEventEmitter.emit("gameupdate", toPublicGame(game));
   return game;
@@ -93,6 +92,7 @@ export const closeRound = async (gameId: string, roundId: string) => {
   gameEventEmitter.emit("roundended", toPublicGame(game), toPublicRound(round));
 };
 
+// TODO: extract outside storage
 export const saveAnswers = async (
   playerId: string,
   gameId: string,
@@ -110,9 +110,10 @@ export const saveAnswers = async (
     throw new Error("Round does not exist");
   }
 
-  const playerIndex = game.players.findIndex((p) => p.id === playerId);
+  const playerIndex = game.playerIds.findIndex(
+    (pId: string) => pId === playerId
+  );
 
-  console.log(answers);
   for (const playerAnswerCategory of Object.keys(answers)) {
     const validCategory = Boolean(
       game.categories.find((c) => c.id === playerAnswerCategory)
@@ -122,13 +123,20 @@ export const saveAnswers = async (
     round.answers[playerAnswerCategory][playerIndex] = {
       answer: answers[playerAnswerCategory],
       playerId,
-      ratings: game.players.map((_) => undefined),
+      ratings: game.playerIds.map((_) => undefined),
     };
   }
 
   round.answersReceivedCount++;
 
-  if (round.answersReceivedCount === game.players.length) {
+  if (round.answersReceivedCount === game.playerIds.length) {
     gameEventEmitter.emit("roundresults", toPublicGame(game), round);
+  }
+};
+
+// TODO: refactor user profile outside
+export const markPlayerLeft = async (playerId: string) => {
+  for (const [_, game] of games.entries()) {
+    const playerInGame = "";
   }
 };

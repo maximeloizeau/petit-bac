@@ -10,13 +10,17 @@ export function Home() {
 
   return (
     <div className="container-home">
-      <h1>Créer une <br></br>nouvelle partie</h1>
+      <h1>
+        Créer une <br></br>nouvelle partie
+      </h1>
       <div className="form">
         <label>Entre ton nom</label>
         <input></input>
       </div>
-      <button onClick={() => dispatch(createNewGame())} className="primary">nouvelle partie</button>
-      <Loading />
+      <button onClick={() => dispatch(createNewGame())} className="primary">
+        nouvelle partie
+      </button>
+      {/* <Loading /> */}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { getSocketFromId, setUserInfo } from "../services/socketStorage";
-import * as generate from "meaningful-string";
+import { createPlayer } from "../services/playerStorage";
 
 export async function loginController(
   socketId: string,
@@ -19,15 +19,9 @@ export async function loginController(
     return;
   }
 
-  let name;
-  if (playerName) {
-    name = playerName;
-  } else {
-    name = generate.meaningful().split("-")[0];
-  }
-  await setUserInfo(socketId, playerId, name);
+  const newUser = createPlayer(playerId, playerName);
+  await setUserInfo(socketId, playerId);
 
-  console.log("login successful");
   socketData.socket.emit("event", {
     event: "loggedin",
     loggedIn: true,

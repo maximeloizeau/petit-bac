@@ -6,6 +6,7 @@ import {
   toPublicRound,
 } from "../models/Game";
 import { gameEventEmitter } from "./gameEventEmitter";
+import { getPlayer } from "./playerStorage";
 
 const games = new Map<string, Game>();
 
@@ -129,7 +130,10 @@ export const saveAnswers = async (
 
   round.answersReceivedCount++;
 
-  if (round.answersReceivedCount === game.playerIds.length) {
+  const currentPlayers = game.playerIds
+    .map(getPlayer)
+    .filter((player) => player && player.left !== true);
+  if (round.answersReceivedCount === currentPlayers.length) {
     gameEventEmitter.emit("roundresults", toPublicGame(game), round);
   }
 };

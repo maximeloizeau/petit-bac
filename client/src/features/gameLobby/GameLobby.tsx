@@ -7,10 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectGame, selectPlayerId } from "../../app/game";
 import { startGame } from "../../actions/game";
 
-
 function formatGameId(gameId: string) {
-  return gameId.split('-')[0];
-} 
+  return gameId.split("-")[0];
+}
 
 export function GameLobby() {
   let { gameId } = useParams();
@@ -75,7 +74,7 @@ export function GameLobby() {
           );
         })}
       </div>
-      {playerId !== game.creator.id ? undefined : (
+      {playerId !== game.creator?.id ? undefined : (
         <button
           className="primary"
           onClick={() => gameId && dispatch(startGame(gameId))}

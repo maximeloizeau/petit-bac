@@ -21,3 +21,13 @@ export function createPlayer(id: string, playerName?: string) {
 
   return userProfile;
 }
+
+export function updatePlayer(id: string, fields: Partial<Player>) {
+  const player = users.get(id);
+  if (!player) return;
+
+  users.set(id, {
+    ...player,
+    ...fields,
+  });
+}

@@ -71,7 +71,10 @@ export function GameLobby() {
         })}
       </div>
       {playerId !== game.creator.id ? undefined : (
-        <button className="Primary" onClick={() => dispatch(startGame())}>
+        <button
+          className="Primary"
+          onClick={() => gameId && dispatch(startGame(gameId))}
+        >
           Commencer la partie
         </button>
       )}

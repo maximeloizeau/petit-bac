@@ -19,7 +19,7 @@ class App extends React.Component {
     return (
       <Router history={browserHistory}>
         <div className="App">
-          <div className="Container">
+          <div className="container">
             <Switch>
               <Route path="/game" component={GameRouter} />
               <Route path="/" component={Home} />

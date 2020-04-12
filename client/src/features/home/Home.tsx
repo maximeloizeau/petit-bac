@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styles from "./Home.module.css";
 import { Loading } from "../loading/Loading";
-
+import { createNewGame } from "../../actions/game";
+import { useDispatch } from "react-redux";
 
 export function Home() {
-  let { gameId } = useParams();
+  const dispatch = useDispatch();
+
   return (
     <div className="container-home">
       <h1>Créer une <br></br>nouvelle partie</h1>
@@ -13,9 +15,8 @@ export function Home() {
         <label>Entre ton nom</label>
         <input></input>
       </div>
-      <Link to={`/game/1234/lobby`}><button className="primary">nouvelle partie</button></Link>
+      <button onClick={() => dispatch(createNewGame())} className="primary">nouvelle partie</button>
       <Loading />
-      
     </div>
   );
 }

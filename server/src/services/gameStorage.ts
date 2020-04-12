@@ -122,7 +122,7 @@ export const saveAnswers = async (
     round.answers[playerAnswerCategory][playerIndex] = {
       answer: answers[playerAnswerCategory],
       playerId,
-      ratings: [],
+      ratings: game.players.map((_) => undefined),
     };
   }
 

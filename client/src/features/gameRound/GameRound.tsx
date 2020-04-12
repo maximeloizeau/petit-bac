@@ -2,9 +2,15 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./GameRound.module.css";
 import "../../App.css";
+import { useSelector } from "react-redux";
+import { selectGame, selectPlayerId, selectRound } from "../../app/game";
 
 export function GameRound() {
   let { gameId } = useParams();
+  const playerId = useSelector(selectPlayerId);
+  const game = useSelector(selectGame);
+  const round = useSelector(selectRound);
+
   return (
     <div className="">
       <h1>Game {gameId}</h1>
@@ -12,7 +18,7 @@ export function GameRound() {
         <div className={` ${styles.boxOne} box `}>
           <div className="subBox center">
             <label>Lettre</label>
-            <span>A</span>
+            <span>{round?.letter}</span>
           </div>
         </div>
         <div className={` ${styles.boxTwo} box `}>
@@ -23,18 +29,12 @@ export function GameRound() {
         </div>
       </div>
       <div className={styles.formAnswers}>
-        <label>Categorie 1</label>
-        <input></input>
-        <label>Categorie 1</label>
-        <input></input>
-        <label>Categorie 1</label>
-        <input></input>
-        <label>Categorie 1</label>
-        <input></input>
-        <label>Categorie 1</label>
-        <input></input>
-        <label>Categorie 1</label>
-        <input></input>
+        {game?.categories.map((category) => (
+          <div>
+            <label>{category.name}</label>
+            <input></input>
+          </div>
+        ))}
       </div>
     </div>
   );

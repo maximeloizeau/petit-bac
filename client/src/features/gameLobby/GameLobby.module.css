@@ -4,7 +4,7 @@
     display: grid;
     margin-top: 40px;
     grid-gap: 40px;
-    grid-template-columns: repeat(4, 1fr); 
+    grid-template-columns: repeat(2, 1fr); 
 }
 
 .playerBox { 
@@ -16,8 +16,6 @@
     border-radius: 20px;
     border: solid 2px white;
     min-height: 92px;
-    grid-column-start: 1; 
-    grid-column-end: 2;
 }
 
 .playerBox.inactive{

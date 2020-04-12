@@ -19,7 +19,8 @@ export const addPlayer = async (gameId: string, player: Player) => {
   }
 
   if (game.players.find((p) => p.id === player.id)) {
-    throw new Error("Already a participant");
+    gameEventEmitter.emit("gameupdate", toPublicGame(game));
+    return game;
   }
 
   game.players.push(player);

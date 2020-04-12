@@ -28,6 +28,7 @@ export async function joinGameController(
 
 function isValidJoin(gameInfo: Game | undefined, player: Player) {
   if (!gameInfo) {
+    console.info("No game info to check valid join");
     return false;
   }
 

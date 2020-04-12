@@ -5,6 +5,7 @@ import {
   defaultRules,
   categories,
   GameState,
+  toPublicGame,
 } from "../models/Game";
 import { saveGame } from "../services/gameStorage";
 import { getSocketFromPlayerId } from "../services/socketStorage";
@@ -37,7 +38,7 @@ export async function newGameController(player: Player, data: {}) {
 
     socketData.socket.emit("event", {
       event: "gamecreated",
-      gameId: gameDetails.id,
+      game: toPublicGame(gameDetails),
     });
   }
 }

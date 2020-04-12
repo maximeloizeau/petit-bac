@@ -1,5 +1,5 @@
 import { browserHistory } from "../App";
-import { setGame, setRound } from "../app/game";
+import { setGame, setRound, updateTimer } from "../app/game";
 import { store } from "../app/store";
 
 export function onEvent(eventData: { [key: string]: any }) {
@@ -19,8 +19,20 @@ export function onEvent(eventData: { [key: string]: any }) {
 
     case "roundstarted":
       store.dispatch(setGame(eventData.game));
-      store.dispatch(setRound(eventData.round));
+      store.dispatch(
+        setRound({ round: eventData.round, game: eventData.game })
+      );
       browserHistory.push(`/game/${eventData.game.id}/round`);
+      break;
+
+    case "roundtimerupdate":
+      store.dispatch(updateTimer(eventData.timerValue));
+      break;
+
+    case "roundended":
+      store.dispatch(
+        setRound({ round: eventData.round, game: eventData.game })
+      );
       break;
   }
 }

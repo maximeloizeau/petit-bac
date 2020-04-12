@@ -66,6 +66,8 @@ export interface Round {
   };
 }
 
+export type PublicRound = Pick<Round, "id" | "letter">;
+
 export interface Game {
   id: string;
   state: GameState;
@@ -92,4 +94,8 @@ export function toPublicGame(game: Game): PublicGame {
     players: game.players,
     creator: game.creator,
   };
+}
+
+export function toPublicRound(round: Round): PublicRound {
+  return { id: round.id, letter: round.letter };
 }

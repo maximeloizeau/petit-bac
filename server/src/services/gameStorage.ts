@@ -1,4 +1,10 @@
-import { Game, Player, toPublicGame } from "../models/Game";
+import {
+  Game,
+  Player,
+  toPublicGame,
+  GameState,
+  toPublicRound,
+} from "../models/Game";
 import { gameEventEmitter } from "./gameEventEmitter";
 
 const games = new Map<string, Game>();
@@ -27,4 +33,33 @@ export const addPlayer = async (gameId: string, player: Player) => {
 
   gameEventEmitter.emit("gameupdate", toPublicGame(game));
   return game;
+};
+
+export const startGame = async (gameId: string) => {
+  const game = games.get(gameId);
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  game.state = GameState.InProgress;
+
+  await startNextRound(gameId);
+};
+
+export const startNextRound = async (gameId: string) => {
+  const game = games.get(gameId);
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  const nextRound = game.rounds.find((round) => round.started !== true);
+  if (!nextRound) {
+    throw new Error("No more rounds to play");
+  }
+
+  gameEventEmitter.emit(
+    "roundstarted",
+    toPublicGame(game),
+    toPublicRound(nextRound)
+  );
 };

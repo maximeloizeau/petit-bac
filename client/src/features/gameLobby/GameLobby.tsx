@@ -57,7 +57,7 @@ export function GameLobby() {
           if (player) {
             return (
               <div className={styles.playerBox}>
-                <label>Player {1}</label>
+                <label>Player {i + 1}</label>
                 <span>{player.name}</span>
               </div>
             );

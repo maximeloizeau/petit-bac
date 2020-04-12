@@ -62,8 +62,7 @@ export const gameSlice = createSlice({
       state,
       action: PayloadAction<{ categoryId: string; answer: string }>
     ) => {
-      state.answers[action.payload.categoryId] =
-        state.answers[action.payload.categoryId] || action.payload.answer;
+      state.answers[action.payload.categoryId] = action.payload.answer;
     },
   },
 });

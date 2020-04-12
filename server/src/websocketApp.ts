@@ -6,7 +6,7 @@ import { newGameController } from "./controllers/newGame";
 import { socketToPlayer } from "./utils/socketToPlayer";
 import { joinGameController } from "./controllers/joinGame";
 import { gameEventEmitter } from "./services/gameEventEmitter";
-import { Game, PublicGame, Round } from "./models/Game";
+import { Game, PublicGame, Round, PublicRound } from "./models/Game";
 import { startGameController } from "./controllers/startGame";
 import { submitAnswersController } from "./controllers/submitAnswers";
 

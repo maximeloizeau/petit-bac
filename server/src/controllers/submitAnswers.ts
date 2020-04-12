@@ -16,7 +16,7 @@ export async function submitAnswersController(
   }: {
     gameId?: string;
     roundId?: string;
-    answers?: Array<{ categoryId: string; answer: string }>;
+    answers?: { [key: string]: string };
   }
 ) {
   if (!gameId || !roundId || !answers) {

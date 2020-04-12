@@ -1,5 +1,5 @@
 export const defaultRules = {
-  roundDuration: 15,
+  roundDuration: 5,
   roundCount: 5,
   categoriesCount: 2,
   playerLimit: 8,
@@ -60,6 +60,14 @@ export enum GameState {
   Archived = "archived",
 }
 
+export interface PlayerAnswer {
+  // One item in the array per player per category
+  playerId: string;
+  answer: string;
+  // Ratings contain the votes for each player
+  ratings: (boolean | undefined)[];
+}
+
 export interface Round {
   id: string;
   started: boolean;
@@ -68,13 +76,7 @@ export interface Round {
   answersReceivedCount: number;
   answers: {
     // One key per category ID
-    [key: string]: Array<{
-      // One item in the array per player per category
-      playerId: string;
-      answer: string;
-      // Ratings contain the votes for each player
-      ratings: boolean[];
-    }>;
+    [key: string]: PlayerAnswer[];
   };
 }
 

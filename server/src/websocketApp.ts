@@ -1,53 +1,57 @@
 import socketIo, { Socket } from "socket.io";
 import { Server } from "http";
-
-const socketStorage: {
-  [key: string]: { socket: Socket; loggedIn: boolean; playerId?: string };
-} = {};
+import { registerSocket, unregisterSocket } from "./services/socketStorage";
+import { loginController } from "./controllers/login";
+import { newGameController } from "./controllers/newGame";
+import { socketToPlayer } from "./utils/socketToPlayer";
+import { joinGameController } from "./controllers/joinGame";
+import { gameEventEmitter } from "./services/gameEventEmitter";
+import { Game, PublicGame } from "./models/Game";
 
 export default function websocketApp(server: Server) {
   const websocketServer = socketIo(server);
 
   websocketServer.on("connection", connectionHandler);
+
+  gameEventEmitter.on("gameupdate", (game: PublicGame) =>
+    websocketServer.to(game.id).emit("event", { event: "gameupdate", game })
+  );
 }
 
 function connectionHandler(socket: Socket) {
   console.log("connected");
 
-  socketStorage[socket.id] = {
-    socket,
-    loggedIn: false,
-    playerId: undefined,
-  };
+  registerSocket(socket.id, socket);
 
-  socket.on("login", (loginData) => loginHandler(socket.id, loginData));
+  socket.on("action", (data) => actionHandler(socket.id, data));
+  socket.on("disconnect", (data) => disconnectHandler(socket.id, data));
 }
 
-function loginHandler(socketId: string, loginData: string) {
-  if (!loginData || typeof loginData !== "string") {
-    console.error("Invalid loginData");
-    return;
-  }
+function disconnectHandler(socketId: string, data: any) {
+  console.log("disconnect", data);
 
-  if (!socketStorage[socketId]) {
-    console.error("Invalid socket id logging in");
-    return;
-  }
-
-  if (socketStorage[socketId].loggedIn !== false) {
-    console.error("Socket already logged in");
-    return;
-  }
-
-  const playerId = loginData;
-  socketStorage[socketId].loggedIn = true;
-  socketStorage[socketId].playerId = playerId;
-
-  socketStorage[socketId].socket.on("action", (data) =>
-    actionHandler(playerId, data)
-  );
+  unregisterSocket(socketId);
 }
 
-function actionHandler(playerId: string, data: string) {
-  console.log("action", data);
+async function actionHandler(socketId: string, data: any) {
+  console.log("actionHandler", data);
+
+  // Unauth routes
+  switch (data.action) {
+    case "login":
+      return loginController(socketId, data);
+  }
+
+  const player = await socketToPlayer(socketId);
+  console.log("action from player", player);
+
+  // Auth routes
+  switch (data.action) {
+    case "newgame":
+      return newGameController(player, data);
+    case "joingame":
+      return joinGameController(player, data);
+  }
+
+  console.error("Unregistered route: " + data.action);
 }

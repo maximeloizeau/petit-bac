@@ -1,7 +1,24 @@
+export const defaultRules = {
+  roundDuration: 90,
+  roundCount: 5,
+  categoriesCount: 2,
+  playerLimit: 8,
+};
+
+export const categories: Category[] = [
+  {
+    id: "animals",
+    name: "Animaux",
+  },
+  {
+    id: "jobs",
+    name: "Metiers",
+  },
+];
+
 export interface Category {
   id: string;
   name: string;
-  lang: string;
 }
 
 export interface Player {
@@ -25,8 +42,16 @@ export interface GameRules {
   playerLimit: number;
 }
 
+export enum GameState {
+  WaitingLobby = "waiting-lobby",
+  InProgress = "in-progress",
+  Ended = "ended",
+  Archived = "archived",
+}
+
 export interface Game {
   id: string;
+  state: GameState;
   categories: Category[];
   players: Player[];
   answers: {
@@ -36,4 +61,16 @@ export interface Game {
     [key: string]: number;
   };
   rules: GameRules;
+  creator: Player;
+}
+
+export type PublicGame = Pick<Game, "id" | "state" | "categories" | "players">;
+
+export function toPublicGame(game: Game) {
+  return {
+    id: game.id,
+    state: game.state,
+    categories: game.categories,
+    players: game.players,
+  };
 }

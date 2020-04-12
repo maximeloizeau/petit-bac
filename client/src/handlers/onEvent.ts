@@ -1,6 +1,13 @@
 import { browserHistory } from "../App";
-import { setGame, setRound, updateTimer } from "../app/game";
+import {
+  setGame,
+  setRound,
+  updateTimer,
+  resetRound,
+  setRoundResults,
+} from "../app/game";
 import { store } from "../app/store";
+import { sendAction } from "../websocket";
 
 export function onEvent(eventData: { [key: string]: any }) {
   const { event } = eventData as { event: string };
@@ -18,6 +25,7 @@ export function onEvent(eventData: { [key: string]: any }) {
       break;
 
     case "roundstarted":
+      store.dispatch(resetRound(eventData.game));
       store.dispatch(setGame(eventData.game));
       store.dispatch(
         setRound({ round: eventData.round, game: eventData.game })
@@ -33,6 +41,16 @@ export function onEvent(eventData: { [key: string]: any }) {
       store.dispatch(
         setRound({ round: eventData.round, game: eventData.game })
       );
+      const game = store.getState().game;
+      sendAction({
+        action: "submitanswers",
+        gameId: game.currentGame?.id,
+        roundId: game.currentRound?.id,
+        answers: game.answers,
+      });
       break;
+
+    case "roundresults":
+      store.dispatch(setRoundResults(eventData.round));
   }
 }

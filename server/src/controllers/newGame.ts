@@ -30,6 +30,7 @@ export async function newGameController(player: Player, data: {}) {
       id: uuidv4(),
       started: false,
       ended: false,
+      answersReceivedCount: 0,
       letter: possibleLetters.charAt(
         Math.floor(Math.random() * possibleLetters.length)
       ),

@@ -46,15 +46,6 @@ export interface Player {
   name: string;
 }
 
-export interface PlayerAnswer {
-  categoryId: string;
-  playerId: string;
-  answer: string;
-  scoring: {
-    [key: string]: boolean | undefined;
-  };
-}
-
 export interface GameRules {
   roundDuration: number;
   roundCount: number;
@@ -74,6 +65,7 @@ export interface Round {
   started: boolean;
   ended: boolean;
   letter: string;
+  answersReceivedCount: number;
   answers: {
     // One key per category ID
     [key: string]: Array<{

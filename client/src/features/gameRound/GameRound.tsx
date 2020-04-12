@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./GameRound.module.css";
 import "../../App.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   selectGame,
   selectPlayerId,
   selectRound,
   selectRoundTimer,
+  updateAnwser,
+  selectAnswers,
 } from "../../app/game";
 
 export function GameRound() {
@@ -16,6 +18,12 @@ export function GameRound() {
   const game = useSelector(selectGame);
   const round = useSelector(selectRound);
   const roundTimer = useSelector(selectRoundTimer);
+  const answers = useSelector(selectAnswers);
+  const dispatch = useDispatch();
+
+  if (round?.ended) {
+    return <div>Loading</div>;
+  }
 
   return (
     <div className="">
@@ -38,7 +46,18 @@ export function GameRound() {
         {game?.categories.map((category) => (
           <div key={category.id}>
             <label>{category.name}</label>
-            <input></input>
+            <input
+              type="text"
+              onChange={(evt) =>
+                dispatch(
+                  updateAnwser({
+                    categoryId: category.id,
+                    answer: evt.target.value,
+                  })
+                )
+              }
+              value={answers.value}
+            />
           </div>
         ))}
       </div>

@@ -92,3 +92,43 @@ export const closeRound = async (gameId: string, roundId: string) => {
 
   gameEventEmitter.emit("roundended", toPublicGame(game), toPublicRound(round));
 };
+
+export const saveAnswers = async (
+  playerId: string,
+  gameId: string,
+  roundId: string,
+  answers: { [key: string]: string }
+) => {
+  const game = games.get(gameId);
+
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  const round = game.rounds.find((round) => round.id === roundId);
+  if (!round) {
+    throw new Error("Round does not exist");
+  }
+
+  const playerIndex = game.players.findIndex((p) => p.id === playerId);
+
+  console.log(answers);
+  for (const playerAnswerCategory of Object.keys(answers)) {
+    const validCategory = Boolean(
+      game.categories.find((c) => c.id === playerAnswerCategory)
+    );
+    if (!validCategory) continue;
+
+    round.answers[playerAnswerCategory][playerIndex] = {
+      answer: answers[playerAnswerCategory],
+      playerId,
+      ratings: [],
+    };
+  }
+
+  round.answersReceivedCount++;
+
+  if (round.answersReceivedCount === game.players.length) {
+    gameEventEmitter.emit("roundresults", toPublicGame(game), round);
+  }
+};

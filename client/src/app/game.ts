@@ -1,6 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk, RootState } from "./store";
-import { PublicGame, PublicRound } from "../../../server/src/models/Game";
+import {
+  PublicGame,
+  PublicRound,
+  Round,
+} from "../../../server/src/models/Game";
 
 interface GameState {
   playerId?: string;
@@ -8,6 +12,10 @@ interface GameState {
   currentGame?: PublicGame;
   currentRound?: PublicRound;
   currentRoundTimer: number;
+  answers: {
+    [key: string]: string;
+  };
+  roundResults?: Round;
 }
 
 const initialState: GameState = {
@@ -16,6 +24,8 @@ const initialState: GameState = {
   currentGame: undefined,
   currentRound: undefined,
   currentRoundTimer: 0,
+  answers: {},
+  roundResults: undefined,
 };
 
 export const gameSlice = createSlice({
@@ -31,6 +41,10 @@ export const gameSlice = createSlice({
     setGame: (state, action: PayloadAction<PublicGame>) => {
       state.currentGame = action.payload;
     },
+    resetRound: (state, action: PayloadAction<PublicGame>) => {
+      state.answers = {};
+      state.currentRoundTimer = action.payload.rules.roundDuration;
+    },
     setRound: (
       state,
       action: PayloadAction<{ round: PublicRound; game: PublicGame }>
@@ -38,17 +52,30 @@ export const gameSlice = createSlice({
       state.currentRound = action.payload.round;
       state.currentRoundTimer = action.payload.game.rules.roundDuration;
     },
+    setRoundResults: (state, action: PayloadAction<Round>) => {
+      state.roundResults = action.payload;
+    },
     updateTimer: (state, action: PayloadAction<number>) => {
       state.currentRoundTimer = action.payload;
+    },
+    updateAnwser: (
+      state,
+      action: PayloadAction<{ categoryId: string; answer: string }>
+    ) => {
+      state.answers[action.payload.categoryId] =
+        state.answers[action.payload.categoryId] || action.payload.answer;
     },
   },
 });
 
 export const {
   setGame,
+  resetRound,
   setRound,
+  setRoundResults,
   setPlayerId,
   updateTimer,
+  updateAnwser,
 } = gameSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
@@ -60,5 +87,7 @@ export const selectPlayerId = (state: RootState) => state.game.playerId;
 export const selectRound = (state: RootState) => state.game.currentRound;
 export const selectRoundTimer = (state: RootState) =>
   state.game.currentRoundTimer;
+export const selectAnswers = (state: RootState) => state.game.answers;
+export const selectRoundResults = (state: RootState) => state.game.roundResults;
 
 export default gameSlice.reducer;

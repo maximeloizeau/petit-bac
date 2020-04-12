@@ -1,5 +1,12 @@
+ 
+
+
 .App {
   text-align: center;
+  background-color: #4451F5;
+  max-width: 992px;
+  margin: auto; 
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -36,4 +43,76 @@
   100% {
     transform: translateY(0px);
   }
+}
+
+.Container {
+  width: calc(992px - 320px);
+  margin: auto;
+  padding: 40px 0;
+}
+
+h1 {
+  color: white;
+  font-weight: 800;
+  text-align: left;
+  margin-bottom: 40px;
+  font-size: 4em;
+  margin-top: 0;
+}
+
+button.Primary {
+  background-color: #EFD66B;
+  border: solid 4px #EFD66B;
+  text-transform: uppercase;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  color: #4451F5;
+  outline: 0;
+  border-radius: 20px;
+  padding: 20px 0;
+  width: 100%;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 40px;
+}
+
+button.Primary:hover {
+  background-color: #4451F5;
+  color: #EFD66B;
+}
+
+
+.box {
+  background-color: #EFD66B;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 80px;
+}
+
+.subBox { 
+  color: #4451F5;
+  display: flex;
+  flex-direction: column;
+}
+
+.subBox.center {
+  margin: auto;
+}
+
+.subBox.center > span, .subBox.center > label {
+  text-align: center;
+}
+
+.subBox > label, .subBox > span { 
+  text-align: left;
+}
+
+.subBox > label {
+  font-weight: 800;
+}
+
+.subBox > span {
+  font-weight: 700;
+  font-size: 60px;
 }

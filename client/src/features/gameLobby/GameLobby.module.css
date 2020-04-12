@@ -1,0 +1,39 @@
+
+
+.players {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-top: 40px;
+    grid-gap: 40px;
+}
+
+.playerBox { 
+    background-color: white;
+    color: #4451F5;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 40px;
+    border-radius: 20px;
+    border: solid 2px white;
+}
+
+.playerBox.inactive{
+    background-color: #4451F5;
+    border-style: dashed;
+}
+
+.playerBox > label, .playerBox > span { 
+    text-align: left;
+}
+
+.playerBox > label {
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.playerBox > span {
+    font-weight: 700;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+

@@ -6,184 +6,57 @@ import "../../App.css";
 export function GameResults() {
   let { gameId } = useParams();
   return (
-    <div className="">
+    <div>
       <h1>Game {gameId}</h1>
-      <div className="twoBoxes">
-        <div className="boxOne box">
-          <div className="subBox center">
-            <label>Lettre</label>
-            <span>A</span>
-          </div>
-        </div>
-        <div className="boxTwo box">
-          <div className="subBox center">
-            <label>Categorie</label>
-            <span>Fruits</span>
-          </div>
+      <div className="box white">
+        <div className="subBox center">
+          <span>Player 1</span>
+          <label>1000 points</label>
         </div>
       </div>
-      <div className="form">
-        <div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.rounds}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={styles.round}></div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
-        </div>
-        <div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.rounds}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={styles.round}></div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
-        </div>
-        <div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.rounds}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={styles.round}></div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
-        </div>
-        <div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.rounds}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={styles.round}></div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
-        </div>
-        <div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.rounds}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={styles.round}></div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
-        </div>
-        <div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.rounds}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={styles.round}></div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
-        </div>
-        <div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.rounds}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={styles.round}></div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
-        </div>
-        <div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.rounds}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={`${styles.round} ${styles.approved}`}></div>
-              <div className={`${styles.round} ${styles.disapproved}`}></div>
-              <div className={styles.round}></div>
-              <div className={styles.round}></div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
+      <div className="box large">
+        <div className="subBox  center">
+          <span>Player 1</span>
+          <label>1000 points</label>
         </div>
       </div>
+      <div className="box medium">
+        <div className="subBox  center">
+          <span>Player 1</span>
+          <label>1000 points</label>
+        </div>
+      </div>
+      <div className="box small">
+        <div className="subBox center">
+          <span>Player 1</span>
+          <label>1000 points</label>
+        </div>
+      </div>
+      <div className="box small">
+        <div className="subBox center">
+          <span>Player 1</span>
+          <label>1000 points</label>
+        </div>
+      </div>
+      <div className="box small">
+        <div className="subBox center">
+          <span>Player 1</span>
+          <label>1000 points</label>
+        </div>
+      </div>
+      <div className="box small">
+        <div className="subBox center">
+          <span>Player 1</span>
+          <label>1000 points</label>
+        </div>
+      </div>
+      <div className="box small">
+        <div className="subBox center">
+          <span>Player 1</span>
+          <label>1000 points</label>
+        </div>
+      </div>
+      <button className="primary">Play again</button>
     </div>
   );
 }

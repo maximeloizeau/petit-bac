@@ -56,8 +56,8 @@ export function GameLobby() {
         </div>
         
       </div>
-      <Link to={`/game/1234/round`}><button className="Primary">Commencer la partie</button></Link>
-      <button className="Secondary">Copier le lien</button>
+      <Link to={`/game/1234/round`}><button className="primary">Commencer la partie</button></Link>
+      <button className="secondary">Copier le lien</button>
       <Link to={`/game/${gameId}/round`}>Play next round</Link>
     </div>
   );

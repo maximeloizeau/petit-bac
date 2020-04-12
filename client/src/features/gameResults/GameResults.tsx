@@ -56,7 +56,7 @@ export function GameResults() {
           <label>1000 points</label>
         </div>
       </div>
-      <button className="primary">Play again</button>
+      <button className="secondary">Play again</button>
     </div>
   );
 }

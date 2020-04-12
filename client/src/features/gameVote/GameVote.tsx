@@ -22,6 +22,30 @@ export function GameVote() {
           </div>
         </div>
       </div>
+      <div className="form first">
+        <div className={styles.rowResult}> 
+          <label className={styles.player}>Player 1</label>
+          <div  className={styles.rowActions}>
+            <div className={styles.votes}>
+              <span className={styles.result}>Result 1</span>
+              <div className={styles.rounds}>
+                <div className={styles.round}></div>
+                <div className={`${styles.round} ${styles.approved}`}></div>
+                <div className={`${styles.round} ${styles.disapproved}`}></div>
+                <div className={styles.round}></div>
+                <div className={`${styles.round} ${styles.approved}`}></div>
+                <div className={`${styles.round} ${styles.disapproved}`}></div>
+                <div className={styles.round}></div>
+                <div className={styles.round}></div>
+              </div>
+            </div>
+            <div  className={styles.actions}>
+              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
+              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="form">
         <div className={styles.rowResult}> 
           <label className={styles.player}>Player 1</label>
@@ -45,6 +69,7 @@ export function GameVote() {
             </div>
           </div>
         </div>
+      </div><div className="form">
         <div className={styles.rowResult}> 
           <label className={styles.player}>Player 1</label>
           <div  className={styles.rowActions}>
@@ -66,7 +91,9 @@ export function GameVote() {
               <button className={`${styles.disapprove} ${styles.action} `}>No</button>
             </div>
           </div>
-        </div><div className={styles.rowResult}> 
+        </div>
+      </div><div className="form">
+        <div className={styles.rowResult}> 
           <label className={styles.player}>Player 1</label>
           <div  className={styles.rowActions}>
             <div className={styles.votes}>
@@ -87,7 +114,9 @@ export function GameVote() {
               <button className={`${styles.disapprove} ${styles.action} `}>No</button>
             </div>
           </div>
-        </div><div className={styles.rowResult}> 
+        </div>
+      </div><div className="form">
+        <div className={styles.rowResult}> 
           <label className={styles.player}>Player 1</label>
           <div  className={styles.rowActions}>
             <div className={styles.votes}>
@@ -108,7 +137,9 @@ export function GameVote() {
               <button className={`${styles.disapprove} ${styles.action} `}>No</button>
             </div>
           </div>
-        </div><div className={styles.rowResult}> 
+        </div>
+      </div><div className="form">
+        <div className={styles.rowResult}> 
           <label className={styles.player}>Player 1</label>
           <div  className={styles.rowActions}>
             <div className={styles.votes}>
@@ -129,7 +160,9 @@ export function GameVote() {
               <button className={`${styles.disapprove} ${styles.action} `}>No</button>
             </div>
           </div>
-        </div><div className={styles.rowResult}> 
+        </div>
+      </div><div className="form">
+        <div className={styles.rowResult}> 
           <label className={styles.player}>Player 1</label>
           <div  className={styles.rowActions}>
             <div className={styles.votes}>
@@ -150,28 +183,9 @@ export function GameVote() {
               <button className={`${styles.disapprove} ${styles.action} `}>No</button>
             </div>
           </div>
-        </div><div className={styles.rowResult}> 
-          <label className={styles.player}>Player 1</label>
-          <div  className={styles.rowActions}>
-            <div className={styles.votes}>
-              <span className={styles.result}>Result 1</span>
-              <div className={styles.rounds}>
-                <div className={styles.round}></div>
-                <div className={`${styles.round} ${styles.approved}`}></div>
-                <div className={`${styles.round} ${styles.disapproved}`}></div>
-                <div className={styles.round}></div>
-                <div className={`${styles.round} ${styles.approved}`}></div>
-                <div className={`${styles.round} ${styles.disapproved}`}></div>
-                <div className={styles.round}></div>
-                <div className={styles.round}></div>
-              </div>
-            </div>
-            <div  className={styles.actions}>
-              <button className={`${styles.approve} ${styles.action} `}>Yes</button>
-              <button className={`${styles.disapprove} ${styles.action} `}>No</button>
-            </div>
-          </div>
-        </div><div className={styles.rowResult}> 
+        </div>
+      </div><div className="form">
+        <div className={styles.rowResult}> 
           <label className={styles.player}>Player 1</label>
           <div  className={styles.rowActions}>
             <div className={styles.votes}>

@@ -7,6 +7,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectGame, selectPlayerId } from "../../app/game";
 import { startGame } from "../../actions/game";
 
+
+function formatGameId(gameId: string) {
+  return gameId.split('-')[0];
+} 
+
 export function GameLobby() {
   let { gameId } = useParams();
   const playerId = useSelector(selectPlayerId);
@@ -37,7 +42,7 @@ export function GameLobby() {
 
   return (
     <div>
-      <h1>Game {gameId}</h1>
+      <h1>Game {formatGameId(gameId)}</h1>
       <div className="box">
         <div className="subBox">
           <label>Joueurs</label>

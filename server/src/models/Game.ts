@@ -49,14 +49,29 @@ export enum GameState {
   Archived = "archived",
 }
 
+export interface Round {
+  id: string;
+  started: boolean;
+  ended: boolean;
+  letter: string;
+  answers: {
+    // One key per category ID
+    [key: string]: Array<{
+      // One item in the array per player per category
+      playerId: string;
+      answer: string;
+      // Ratings contain the votes for each player
+      ratings: boolean[];
+    }>;
+  };
+}
+
 export interface Game {
   id: string;
   state: GameState;
   categories: Category[];
+  rounds: Round[];
   players: Player[];
-  answers: {
-    [key: string]: PlayerAnswer[];
-  };
   scoreboard: {
     [key: string]: number;
   };

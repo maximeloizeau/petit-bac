@@ -6,7 +6,9 @@ import { newGameController } from "./controllers/newGame";
 import { socketToPlayer } from "./utils/socketToPlayer";
 import { joinGameController } from "./controllers/joinGame";
 import { gameEventEmitter } from "./services/gameEventEmitter";
-import { Game, PublicGame } from "./models/Game";
+import { Game, PublicGame, Round } from "./models/Game";
+import { startGameController } from "./controllers/startGame";
+import { submitAnswersController } from "./controllers/submitAnswers";
 
 export default function websocketApp(server: Server) {
   const websocketServer = socketIo(server);
@@ -15,6 +17,28 @@ export default function websocketApp(server: Server) {
 
   gameEventEmitter.on("gameupdate", (game: PublicGame) =>
     websocketServer.to(game.id).emit("event", { event: "gameupdate", game })
+  );
+  gameEventEmitter.on("roundstarted", (game: PublicGame, round: PublicRound) =>
+    websocketServer
+      .to(game.id)
+      .emit("event", { event: "roundstarted", game, round })
+  );
+  gameEventEmitter.on("roundended", (game: PublicGame, round: PublicRound) =>
+    websocketServer
+      .to(game.id)
+      .emit("event", { event: "roundended", game, round })
+  );
+  gameEventEmitter.on(
+    "roundtimerupdate",
+    (game: PublicGame, timerValue: number) =>
+      websocketServer
+        .to(game.id)
+        .emit("event", { event: "roundtimerupdate", timerValue })
+  );
+  gameEventEmitter.on("roundresults", (game: PublicGame, round: Round) =>
+    websocketServer
+      .to(game.id)
+      .emit("event", { event: "roundresults", game, round })
   );
 }
 
@@ -51,6 +75,10 @@ async function actionHandler(socketId: string, data: any) {
       return newGameController(player, data);
     case "joingame":
       return joinGameController(player, data);
+    case "startgame":
+      return startGameController(player, data);
+    case "submitanswers":
+      return submitAnswersController(player, data);
   }
 
   console.error("Unregistered route: " + data.action);

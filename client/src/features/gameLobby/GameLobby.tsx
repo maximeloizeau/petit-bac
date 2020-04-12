@@ -4,10 +4,12 @@ import styles from "./GameLobby.module.css";
 import "../../App.css";
 import { sendAction } from "../../websocket";
 import { useSelector, useDispatch } from "react-redux";
-import { selectGame } from "../../app/game";
+import { selectGame, selectPlayerId } from "../../app/game";
+import { startGame } from "../../actions/game";
 
 export function GameLobby() {
   let { gameId } = useParams();
+  const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
   const dispatch = useDispatch();
 
@@ -17,6 +19,11 @@ export function GameLobby() {
 
   if (!game) {
     return <h1>"Loading"</h1>;
+  }
+
+  if (gameId !== game.id) {
+    alert("Wrong game id");
+    return <div>"Invalid state"</div>;
   }
 
   const numberOfSlots = 8;
@@ -38,33 +45,40 @@ export function GameLobby() {
         </div>
         <div className="subBox">
           <label>Categories</label>
-          <span>6</span>
+          <span>{game.categories.length}</span>
         </div>
         <div className="subBox">
           <label>Temps</label>
-          <span>30s</span>
+          <span>{game.rules.roundDuration}s</span>
         </div>
       </div>
       <div className={styles.players}>
         {playerList.map((player, i) => {
           if (player) {
             return (
-              <div className={styles.playerBox}>
-                <label>Player {1}</label>
+              <div className={styles.playerBox} key={i}>
+                <label>Player {i + 1}</label>
                 <span>{player.name}</span>
               </div>
             );
           }
           return (
-            <div className={`${styles.playerBox} ${styles.inactive}`}></div>
+            <div
+              className={`${styles.playerBox} ${styles.inactive}`}
+              key={i}
+            ></div>
           );
         })}
       </div>
-      <Link to={`/game/${gameId}/round`}>
-        <button className="Primary">Commencer la partie</button>
-      </Link>
+      {playerId !== game.creator.id ? undefined : (
+        <button
+          className="primary"
+          onClick={() => gameId && dispatch(startGame(gameId))}
+        >
+          Commencer la partie
+        </button>
+      )}
       <button className="secondary">Copier le lien</button>
-
     </div>
   );
 }

@@ -1,4 +1,11 @@
-import { Game, Player, toPublicGame } from "../models/Game";
+import {
+  Game,
+  Player,
+  toPublicGame,
+  GameState,
+  toPublicRound,
+  Round,
+} from "../models/Game";
 import { gameEventEmitter } from "./gameEventEmitter";
 
 const games = new Map<string, Game>();
@@ -27,4 +34,101 @@ export const addPlayer = async (gameId: string, player: Player) => {
 
   gameEventEmitter.emit("gameupdate", toPublicGame(game));
   return game;
+};
+
+export const startGame = async (gameId: string) => {
+  const game = games.get(gameId);
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  game.state = GameState.InProgress;
+
+  await startNextRound(gameId);
+};
+
+export const startNextRound = async (gameId: string) => {
+  const game = games.get(gameId);
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  const nextRound = game.rounds.find((round) => round.started !== true);
+  if (!nextRound) {
+    throw new Error("No more rounds to play");
+  }
+
+  nextRound.started = true;
+
+  gameEventEmitter.emit(
+    "roundstarted",
+    toPublicGame(game),
+    toPublicRound(nextRound)
+  );
+
+  let timerValue = game.rules.roundDuration;
+  const timerSchedule: NodeJS.Timeout = setInterval(() => {
+    if (timerValue <= 0) {
+      closeRound(gameId, nextRound.id);
+      clearInterval(timerSchedule);
+    }
+
+    gameEventEmitter.emit("roundtimerupdate", toPublicGame(game), --timerValue);
+  }, 1000);
+};
+
+export const closeRound = async (gameId: string, roundId: string) => {
+  const game = games.get(gameId);
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  const round = game.rounds.find((round) => round.id === roundId);
+  if (!round) {
+    throw new Error("Round does not exist");
+  }
+
+  round.ended = true;
+
+  gameEventEmitter.emit("roundended", toPublicGame(game), toPublicRound(round));
+};
+
+export const saveAnswers = async (
+  playerId: string,
+  gameId: string,
+  roundId: string,
+  answers: { [key: string]: string }
+) => {
+  const game = games.get(gameId);
+
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  const round = game.rounds.find((round) => round.id === roundId);
+  if (!round) {
+    throw new Error("Round does not exist");
+  }
+
+  const playerIndex = game.players.findIndex((p) => p.id === playerId);
+
+  console.log(answers);
+  for (const playerAnswerCategory of Object.keys(answers)) {
+    const validCategory = Boolean(
+      game.categories.find((c) => c.id === playerAnswerCategory)
+    );
+    if (!validCategory) continue;
+
+    round.answers[playerAnswerCategory][playerIndex] = {
+      answer: answers[playerAnswerCategory],
+      playerId,
+      ratings: [],
+    };
+  }
+
+  round.answersReceivedCount++;
+
+  if (round.answersReceivedCount === game.players.length) {
+    gameEventEmitter.emit("roundresults", toPublicGame(game), round);
+  }
 };

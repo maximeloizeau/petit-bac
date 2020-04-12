@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import * as generate from "meaningful-string";
 import {
   Game,
@@ -6,28 +7,48 @@ import {
   categories,
   GameState,
   toPublicGame,
+  Round,
 } from "../models/Game";
 import { saveGame } from "../services/gameStorage";
 import { getSocketFromPlayerId } from "../services/socketStorage";
 
 export async function newGameController(player: Player, data: {}) {
+  const possibleLetters = "ABCDEFGHIJKLMNOPRSTUV";
   const gameId = generate.meaningful();
 
+  const rules = defaultRules;
   const selectedCategories = categories;
-  const answers: Game["answers"] = {};
+
+  const categoriesAnswersSkeleton: { [key: string]: Array<any> } = {};
   for (const category of selectedCategories) {
-    answers[category.id] = [];
+    categoriesAnswersSkeleton[category.id] = [];
+  }
+
+  const rounds: Round[] = [];
+  for (let i = 0; i < rules.roundCount; i++) {
+    rounds[i] = {
+      id: uuidv4(),
+      started: false,
+      ended: false,
+      answersReceivedCount: 0,
+      letter: possibleLetters.charAt(
+        Math.floor(Math.random() * possibleLetters.length)
+      ),
+      answers: {
+        ...categoriesAnswersSkeleton,
+      },
+    };
   }
 
   const gameDetails = {
     id: gameId,
     state: GameState.WaitingLobby,
-    categories,
-    answers,
+    categories: selectedCategories,
+    rounds,
     players: [],
     creator: player,
     scoreboard: {},
-    rules: defaultRules,
+    rules,
   };
 
   await saveGame(gameId, gameDetails);

@@ -1,10 +1,13 @@
 import socketIo from "socket.io-client";
 import { login } from "./handlers/login";
 import { onEvent } from "./handlers/onEvent";
-const host = "localhost:8888";
+const host =
+  window.location.port === "3000"
+    ? "http://localhost:8888"
+    : "https://49e99a3c.ngrok.io/";
 
 // A new Websocket connection is initialized with the server
-const ws = socketIo(`http://${host}/`);
+const ws = socketIo(host);
 ws.on("close", (e: any) => {
   console.log("close ws connection: ", e.code, e.reason);
 });

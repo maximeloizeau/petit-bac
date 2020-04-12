@@ -56,14 +56,17 @@ export function GameLobby() {
         {playerList.map((player, i) => {
           if (player) {
             return (
-              <div className={styles.playerBox}>
+              <div className={styles.playerBox} key={i}>
                 <label>Player {i + 1}</label>
                 <span>{player.name}</span>
               </div>
             );
           }
           return (
-            <div className={`${styles.playerBox} ${styles.inactive}`}></div>
+            <div
+              className={`${styles.playerBox} ${styles.inactive}`}
+              key={i}
+            ></div>
           );
         })}
       </div>

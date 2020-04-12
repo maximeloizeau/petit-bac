@@ -23,7 +23,7 @@ export async function loginController(
   if (playerName) {
     name = playerName;
   } else {
-    name = generate.meaningful();
+    name = generate.meaningful().split("-")[0];
   }
   await setUserInfo(socketId, playerId, name);
 

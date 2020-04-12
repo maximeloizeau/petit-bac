@@ -42,15 +42,24 @@ export function onEvent(eventData: { [key: string]: any }) {
         setRound({ round: eventData.round, game: eventData.game })
       );
       const game = store.getState().game;
+
+      const answers: { [key: string]: string } = {};
+      const categories = game.currentGame?.categories || [];
+      for (const category of categories) {
+        answers[category.id] = game.answers[category.id] || "";
+      }
+
       sendAction({
         action: "submitanswers",
         gameId: game.currentGame?.id,
         roundId: game.currentRound?.id,
-        answers: game.answers,
+        answers: answers,
       });
       break;
 
     case "roundresults":
       store.dispatch(setRoundResults(eventData.round));
+      browserHistory.push(`/game/${eventData.game.id}/vote`);
+      break;
   }
 }

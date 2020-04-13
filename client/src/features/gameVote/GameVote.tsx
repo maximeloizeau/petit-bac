@@ -87,8 +87,9 @@ function ResultCategory(
           </div>
         </div>
       </div>
-      {playerAnswers.map((answer) =>
-        PlayerAnswerLine(game, roundResults.id, category.id, answer)
+      {playerAnswers.map(
+        (answer) =>
+          answer && PlayerAnswerLine(game, roundResults.id, category.id, answer)
       )}
     </div>
   );

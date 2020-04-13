@@ -5,7 +5,7 @@ import websocketApp from "./websocketApp";
 const server = new Server(app);
 websocketApp(server);
 
-server.listen(8888, "127.0.0.1", () => {
+server.listen(process.env.PORT || 8888, () => {
   console.log("App is running");
 });
 

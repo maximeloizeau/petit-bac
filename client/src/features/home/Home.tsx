@@ -7,7 +7,7 @@ export function Home() {
   const dispatch = useDispatch();
 
   return (
-    <div className="container-home">
+    <div className="container">
       <h1>
         Créer une <br></br>nouvelle partie
       </h1>

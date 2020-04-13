@@ -45,7 +45,6 @@
 }
 
 .container {
-  margin: auto;
   padding: 5% 10% 5% 10%;
   flex: 1 0 auto;
 }

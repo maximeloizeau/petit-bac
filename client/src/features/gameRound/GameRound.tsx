@@ -11,6 +11,7 @@ import {
   updateAnwser,
   selectAnswers,
 } from "../../app/game";
+import { Loading } from "../loading/Loading";
 
 export function GameRound() {
   let { gameId } = useParams();
@@ -21,12 +22,12 @@ export function GameRound() {
   const answers = useSelector(selectAnswers);
   const dispatch = useDispatch();
 
-  if (round?.ended) {
-    return <div>Loading</div>;
+  if (round?.ended || true) {
+    return <Loading />;
   }
 
   return (
-    <div className="">
+    <div>
       <h1>Game {gameId}</h1>
       <div className="twoBoxes">
         <div className="boxOne box">

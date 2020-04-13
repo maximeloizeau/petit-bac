@@ -19,12 +19,10 @@ class App extends React.Component {
     return (
       <Router history={browserHistory}>
         <div className="App">
-          <div className="container">
             <Switch>
               <Route path="/game" component={GameRouter} />
               <Route path="/" component={Home} />
             </Switch>
-          </div>
           <footer>© 2020 Julia Dirand & Maxime Loizeau. All Rights Reserved.</footer>
         </div>
       </Router>
@@ -33,7 +31,7 @@ class App extends React.Component {
 }
 
 const GameRouter = ({ match }: { match: { path: string } }) => (
-  <div>
+  <div className="container">
     <Route path={`${match.path}/:gameId/lobby`} component={GameLobby} />
     <Route path={`${match.path}/:gameId/round`} component={GameRound} />
     <Route path={`${match.path}/:gameId/results`} component={GameResults} />

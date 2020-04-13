@@ -52,7 +52,7 @@ export class Loading extends React.Component<LoadingComponentProps, LoadingCompo
 
   render() {
     return (
-      <div>
+      <div className={styles.containerLoading}>
         <div className={styles.scene}>
           <div className={`${styles.cube} ${this.state.faceClass} `} >
             <div className={`${styles.cubeface} ${styles.cubefacefront}`}>

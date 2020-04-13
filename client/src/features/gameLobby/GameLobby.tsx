@@ -6,7 +6,7 @@ import { sendAction } from "../../websocket";
 import { useSelector, useDispatch } from "react-redux";
 import { selectGame, selectPlayerId } from "../../app/game";
 import { startGame } from "../../actions/game";
-
+import { Loading } from "../loading/Loading";
 
 function formatGameId(gameId: string) {
   return gameId.split('-')[0];
@@ -23,7 +23,7 @@ export function GameLobby() {
   }, []);
 
   if (!game) {
-    return <h1>"Loading"</h1>;
+    return <Loading />
   }
 
   if (gameId !== game.id) {

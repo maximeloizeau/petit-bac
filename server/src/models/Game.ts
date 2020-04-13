@@ -1,8 +1,8 @@
 import { getPlayer } from "../services/playerStorage";
 
 export const defaultRules = {
-  roundDuration: 90,
-  roundCount: 2,
+  roundDuration: 45,
+  roundCount: 3,
   categoriesCount: 7,
   playerLimit: 8,
 };
@@ -105,7 +105,7 @@ export interface Game {
 
 export type PublicGame = Pick<
   Game,
-  "id" | "state" | "categories" | "rules" | "roundsLeft" | "scoreboard"
+  "id" | "state" | "categories" | "rules" | "roundsLeft" | "scoreboard" |"currentRound"
 > & {
   players: (Player | undefined)[];
   creator: Player | undefined;
@@ -116,6 +116,7 @@ export function toPublicGame(game: Game): PublicGame {
     id: game.id,
     state: game.state,
     categories: game.categories,
+    currentRound: game.currentRound,
     players: game.playerIds.map(getPlayer),
     creator: getPlayer(game.creatorId),
     rules: game.rules,

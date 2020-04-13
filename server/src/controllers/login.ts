@@ -1,5 +1,5 @@
 import { getSocketFromId, setUserInfo } from "../services/socketStorage";
-import { createPlayer } from "../services/playerStorage";
+import { createPlayer, getPlayer } from "../services/playerStorage";
 
 export async function loginController(
   socketId: string,
@@ -19,7 +19,8 @@ export async function loginController(
     return;
   }
 
-  const newUser = createPlayer(playerId, playerName);
+  const user =
+    (await getPlayer(playerId)) || (await createPlayer(playerId, playerName));
   await setUserInfo(socketId, playerId);
 
   socketData.socket.emit("event", {

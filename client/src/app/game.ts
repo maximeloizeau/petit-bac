@@ -16,6 +16,7 @@ interface GameState {
     [key: string]: string;
   };
   roundResults?: Round;
+  voteAnswers?: Round["answers"];
 }
 
 const initialState: GameState = {
@@ -26,6 +27,7 @@ const initialState: GameState = {
   currentRoundTimer: 0,
   answers: {},
   roundResults: undefined,
+  voteAnswers: {},
 };
 
 export const gameSlice = createSlice({
@@ -54,6 +56,7 @@ export const gameSlice = createSlice({
     },
     setRoundResults: (state, action: PayloadAction<Round>) => {
       state.roundResults = action.payload;
+      state.voteAnswers = action.payload.answers;
     },
     updateTimer: (state, action: PayloadAction<number>) => {
       state.currentRoundTimer = action.payload;
@@ -88,5 +91,7 @@ export const selectRoundTimer = (state: RootState) =>
   state.game.currentRoundTimer;
 export const selectAnswers = (state: RootState) => state.game.answers;
 export const selectRoundResults = (state: RootState) => state.game.roundResults;
+export const selectCategoryVoteAnswers = (state: RootState, category: string) =>
+  (state.game.voteAnswers && state.game.voteAnswers[category]) || [];
 
 export default gameSlice.reducer;

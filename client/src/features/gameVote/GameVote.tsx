@@ -3,13 +3,18 @@ import { useParams } from "react-router-dom";
 import styles from "./GameVote.module.css";
 import "../../App.css";
 import { useSelector, useDispatch } from "react-redux";
-import { selectPlayerId, selectGame, selectRoundResults } from "../../app/game";
+import {
+  selectPlayerId,
+  selectGame,
+  selectRoundResults,
+  selectCategoryVoteAnswers,
+} from "../../app/game";
 import {
   Round,
   Category,
   PlayerAnswer,
 } from "../../../../server/src/models/Game";
-import { nextRound } from "../../actions/game";
+import { nextRound, voteForAnswer } from "../../actions/game";
 
 export function GameVote() {
   let { gameId } = useParams();
@@ -18,18 +23,22 @@ export function GameVote() {
   const roundResults = useSelector(selectRoundResults);
   const dispatch = useDispatch();
 
+  if (!game || !gameId || !roundResults) {
+    return <div>Unable to display results: gameId is not set</div>;
+  }
+
   return (
     <div>
       <h1>Game {gameId}</h1>
 
-      {game?.categories.map((category) =>
-        ResultCategory(category, roundResults)
+      {game.categories.map((category) =>
+        ResultCategory(game.id, category, roundResults)
       )}
 
-      {playerId !== game?.creator?.id ? undefined : (
+      {playerId !== game.creator?.id ? undefined : (
         <button
           className="primary"
-          onClick={() => gameId && dispatch(nextRound(gameId))}
+          onClick={() => dispatch(nextRound(game.id))}
         >
           Next round
         </button>
@@ -38,7 +47,16 @@ export function GameVote() {
   );
 }
 
-function ResultCategory(category: Category, roundResults?: Round) {
+function ResultCategory(
+  gameId: string,
+  category: Category,
+  roundResults: Round
+) {
+  const playerAnswers = useSelector((state) =>
+    selectCategoryVoteAnswers(state as any, category.id)
+  );
+
+  console.log("render");
   return (
     <div key={"results" + category.id}>
       <div className="twoBoxes">
@@ -55,14 +73,21 @@ function ResultCategory(category: Category, roundResults?: Round) {
           </div>
         </div>
       </div>
-      {roundResults?.answers[category.id].map((answer) =>
-        PlayerAnswerLine(category.id, answer)
+      {playerAnswers.map((answer) =>
+        PlayerAnswerLine(gameId, roundResults.id, category.id, answer)
       )}
     </div>
   );
 }
 
-function PlayerAnswerLine(categoryId: string, answer: PlayerAnswer) {
+function PlayerAnswerLine(
+  gameId: string,
+  roundId: string,
+  categoryId: string,
+  answer: PlayerAnswer
+) {
+  console.log(categoryId, answer.ratings);
+  const dispatch = useDispatch();
   return (
     <div className="form" key={answer.playerId + categoryId}>
       <div className={styles.rowResult}>
@@ -73,17 +98,45 @@ function PlayerAnswerLine(categoryId: string, answer: PlayerAnswer) {
             <div className={styles.rounds}>
               {answer.ratings.map((rating, i) => (
                 <div
-                  className={`${styles.round} `}
+                  className={`${styles.round} ${
+                    rating === true ? styles.approved : ""
+                  } ${rating === false ? styles.disapproved : ""}`}
                   key={i + "rating" + categoryId}
                 ></div>
               ))}
             </div>
           </div>
           <div className={styles.actions}>
-            <button className={`${styles.approve} ${styles.action} `}>
+            <button
+              className={`${styles.approve} ${styles.action} `}
+              onClick={() =>
+                dispatch(
+                  voteForAnswer(
+                    gameId,
+                    roundId,
+                    categoryId,
+                    answer.playerId,
+                    true
+                  )
+                )
+              }
+            >
               Yes
             </button>
-            <button className={`${styles.disapprove} ${styles.action} `}>
+            <button
+              className={`${styles.disapprove} ${styles.action} `}
+              onClick={() =>
+                dispatch(
+                  voteForAnswer(
+                    gameId,
+                    roundId,
+                    categoryId,
+                    answer.playerId,
+                    false
+                  )
+                )
+              }
+            >
               No
             </button>
           </div>

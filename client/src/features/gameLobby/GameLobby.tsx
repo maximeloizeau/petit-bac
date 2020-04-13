@@ -26,7 +26,6 @@ export function GameLobby() {
   }
 
   if (gameId !== game.id) {
-    alert("Wrong game id");
     return <div>"Invalid state"</div>;
   }
 

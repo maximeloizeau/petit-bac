@@ -1,120 +1,119 @@
 .rowResult {
-    display: flex;
-    flex-direction: column;
-    border-bottom: solid 2px blue;
-    padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  border-bottom: solid 2px blue;
+  padding: 20px 0;
 }
 
 .rowResult:first-child {
-    padding-top: 0;
+  padding-top: 0;
 }
 
 .rowResult:last-child {
-    padding-bottom: 0;
+  padding-bottom: 0;
 }
 
-.rowResult:last-child { 
-    border-bottom: none;
+.rowResult:last-child {
+  border-bottom: none;
 }
 
 .result {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4451F5;
-    margin-right: 40px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #4451f5;
+  margin-right: 40px;
 }
 
-.player { 
-    font-weight: bold;
-    color: #4451F5;
-    margin-bottom: 0;
+.player {
+  font-weight: bold;
+  color: #4451f5;
+  margin-bottom: 0;
 }
 
 .rowActions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.action{
-    height:40px;
-    background-color: transparent;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
+.action {
+  height: 40px;
+  background-color: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .action.approve {
-    margin-right: 20px;
-    border: solid 2px #1aee2a;
-    color: #1aee2a;
-    font-size: 16px;
+  margin-right: 20px;
+  border: solid 2px #1aee2a;
+  color: #1aee2a;
+  font-size: 16px;
 }
 
 .action:hover.approve {
-    margin-right: 20px;
-    border: solid 2px #1aee2a;
-    color: white;
-    font-size: 16px;
-    background-color: #1aee2a;
+  margin-right: 20px;
+  border: solid 2px #1aee2a;
+  color: white;
+  font-size: 16px;
+  background-color: #1aee2a;
 }
 
 .action.disapprove {
-    border: solid 2px red;
-    color: red;
-    font-size: 16px;
+  border: solid 2px red;
+  color: red;
+  font-size: 16px;
 }
 
-
 .action:hover.disapprove {
-    border: solid 2px red;
-    color: white;
-    font-size: 16px;
-    background: red;
+  border: solid 2px red;
+  color: white;
+  font-size: 16px;
+  background: red;
 }
 
 .votes {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .rounds {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .round {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: solid 1px blue;
-    margin-right: 20px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: solid 1px blue;
+  margin-right: 20px;
 }
 
 .round.approved {
-    background-color: red;
-    border: solid 1px red;
+  background-color: #1aee2a;
+  border: solid 1px #1aee2a;
 }
 
 .round.disapproved {
-    background-color: #1aee2a;
-    border: solid 1px #1aee2a;
+  background-color: red;
+  border: solid 1px red;
 }
 
 @media only screen and (max-width: 768px) {
-    .rowActions {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .votes {
-        display: flex;
-        flex-direction: column;
-    }
-    .rounds {
-        display: flex;
-        flex-direction: row;
-        margin: 20px 0;
-    }
+  .rowActions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .votes {
+    display: flex;
+    flex-direction: column;
+  }
+  .rounds {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0;
+  }
 }

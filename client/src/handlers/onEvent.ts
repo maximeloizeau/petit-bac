@@ -61,5 +61,9 @@ export function onEvent(eventData: { [key: string]: any }) {
       store.dispatch(setRoundResults(eventData.round));
       browserHistory.push(`/game/${eventData.game.id}/vote`);
       break;
+
+    case "voteupdate":
+      store.dispatch(setRoundResults(eventData.round));
+      break;
   }
 }

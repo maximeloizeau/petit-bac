@@ -138,9 +138,36 @@ export const saveAnswers = async (
   }
 };
 
-// TODO: refactor user profile outside
-export const markPlayerLeft = async (playerId: string) => {
-  for (const [_, game] of games.entries()) {
-    const playerInGame = "";
+export function saveVote(
+  voterId: string,
+  gameId: string,
+  roundId: string,
+  categoryId: string,
+  answerPlayerId: string,
+  vote: boolean
+) {
+  const game = games.get(gameId);
+  if (!game) {
+    throw new Error("Game does not exist");
   }
-};
+
+  const round = game.rounds.find((round) => round.id === roundId);
+  if (!round) {
+    throw new Error("Round does not exist");
+  }
+
+  const roundAnswers = round.answers[categoryId];
+  if (!roundAnswers) {
+    throw new Error("Category does not exist for this round");
+  }
+
+  const playerAnswer = roundAnswers.find((a) => a.playerId === answerPlayerId);
+  if (!playerAnswer) {
+    throw new Error("Player did not player for this round");
+  }
+
+  const voterIndex = game.playerIds.indexOf(voterId);
+  playerAnswer.ratings[voterIndex] = vote;
+
+  gameEventEmitter.emit("voteupdate", toPublicGame(game), round);
+}

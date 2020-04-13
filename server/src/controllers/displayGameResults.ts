@@ -52,7 +52,7 @@ export async function displayGameResultsController(
       playerId,
       score: playerScores[playerId],
     }))
-    .sort((a, b) => a.score - b.score);
+    .sort((a, b) => b.score - a.score);
 
   gameEventEmitter.emit("gameresults", toPublicGame(game));
 }

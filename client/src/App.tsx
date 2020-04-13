@@ -1,7 +1,7 @@
 import { createBrowserHistory } from "history";
 import React from "react";
 import "./App.css";
-import { Router, Switch, Route, Link } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
 import { GameLobby } from "./features/gameLobby/GameLobby";
 import { GameRound } from "./features/gameRound/GameRound";
 import { GameVote } from "./features/gameVote/GameVote";
@@ -11,10 +11,6 @@ import { GameResults } from "./features/gameResults/GameResults";
 export const browserHistory = createBrowserHistory();
 
 class App extends React.Component {
-  constructor(props: React.Props<{}>) {
-    super(props);
-  }
-
   render() {
     return (
       <Router history={browserHistory}>
@@ -25,7 +21,9 @@ class App extends React.Component {
               <Route path="/" component={Home} />
             </Switch>
           </div>
-          <footer>© 2020 Julia Dirand & Maxime Loizeau. All Rights Reserved.</footer>
+          <footer>
+            © 2020 Julia Dirand & Maxime Loizeau. All Rights Reserved.
+          </footer>
         </div>
       </Router>
     );

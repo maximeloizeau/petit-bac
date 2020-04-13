@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import styles from "./GameRound.module.css";
 import "../../App.css";
 import { useSelector, useDispatch } from "react-redux";
 import {
   selectGame,
-  selectPlayerId,
   selectRound,
   selectRoundTimer,
   updateAnwser,
@@ -14,7 +12,6 @@ import {
 
 export function GameRound() {
   let { gameId } = useParams();
-  const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
   const round = useSelector(selectRound);
   const roundTimer = useSelector(selectRoundTimer);

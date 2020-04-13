@@ -1,7 +1,5 @@
-import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import styles from "./Home.module.css";
-import { Loading } from "../loading/Loading";
+import React from "react";
+// import { Loading } from "../loading/Loading";
 import { createNewGame } from "../../actions/game";
 import { useDispatch } from "react-redux";
 

@@ -1,15 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import styles from "./GameVote.module.css";
 import "../../App.css";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  selectPlayerId,
-  selectGame,
-  selectAnswers,
-  selectRound,
-  selectRoundResults,
-} from "../../app/game";
+import { selectPlayerId, selectGame, selectRoundResults } from "../../app/game";
 import {
   Round,
   Category,
@@ -23,8 +17,6 @@ export function GameVote() {
   const game = useSelector(selectGame);
   const roundResults = useSelector(selectRoundResults);
   const dispatch = useDispatch();
-
-  const categoryIndex = 0;
 
   return (
     <div>

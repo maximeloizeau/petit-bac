@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./GameLobby.module.css";
 import "../../App.css";
 import { sendAction } from "../../websocket";

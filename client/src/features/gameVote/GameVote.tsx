@@ -95,6 +95,8 @@ function PlayerAnswerLine(
         <div className={styles.rowActions}>
           <div className={styles.votes}>
             <span className={styles.result}>{answer.answer}</span>
+          </div>
+          <div className={styles.votes}>
             <div className={styles.rounds}>
               {answer.ratings.map((rating, i) => (
                 <div
@@ -105,8 +107,6 @@ function PlayerAnswerLine(
                 ></div>
               ))}
             </div>
-          </div>
-          <div className={styles.actions}>
             <button
               className={`${styles.approve} ${styles.action} `}
               onClick={() =>

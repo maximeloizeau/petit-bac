@@ -10,16 +10,19 @@ export async function joinGameController(
     throw new Error("Invalid game id");
   }
 
-  const gameInfo = await getGame(gameId);
-
-  if (!isValidJoin(gameInfo, player)) {
-    throw new Error("Invalid time to join game");
-  }
-
   const socketData = await getSocketFromPlayerId(player.id);
   if (!socketData) {
     console.error("Unable to join");
     return;
+  }
+
+  const gameInfo = await getGame(gameId);
+
+  if (!isValidJoin(gameInfo, player)) {
+    return socketData.socket.emit("event", {
+      event: "joinfail",
+      message: "Game cannot be joined: already started or too many players",
+    });
   }
 
   socketData.socket.join(gameId);

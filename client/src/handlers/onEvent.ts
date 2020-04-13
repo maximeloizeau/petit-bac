@@ -70,5 +70,10 @@ export function onEvent(eventData: { [key: string]: any }) {
       store.dispatch(setGame(eventData.game));
       browserHistory.push(`/game/${eventData.game.id}/results`);
       break;
+
+    case "joinfail":
+      alert(eventData.message);
+      browserHistory.push(`/`);
+      break;
   }
 }

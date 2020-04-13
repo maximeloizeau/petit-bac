@@ -3,6 +3,7 @@ import { sendAction } from "../websocket";
 export const GAME_LOADING = "game-loading";
 export const ROUND_LOADING = "round-loading";
 export const VOTE_LOADING = "vote-loading";
+export const GAME_RESULTS_LOADING = "game-results-loading";
 
 export function createNewGame() {
   sendAction({ action: "newgame" });
@@ -25,6 +26,14 @@ export function nextRound(gameId: string) {
 
   return {
     type: ROUND_LOADING,
+  };
+}
+
+export function displayGameResults(gameId: string) {
+  sendAction({ action: "displaygameresults", gameId: gameId });
+
+  return {
+    type: GAME_RESULTS_LOADING,
   };
 }
 

@@ -16,6 +16,7 @@ import { submitAnswersController } from "./controllers/submitAnswers";
 import { disconnectPlayer } from "./controllers/disconnectPlayer";
 import { nextRoundController } from "./controllers/nextRound";
 import { voteForAnswerController } from "./controllers/voteForAnwser";
+import { displayGameResultsController } from "./controllers/displayGameResults";
 
 export default function websocketApp(server: Server) {
   const websocketServer = socketIo(server);
@@ -51,6 +52,9 @@ export default function websocketApp(server: Server) {
     websocketServer
       .to(game.id)
       .emit("event", { event: "voteupdate", game, round })
+  );
+  gameEventEmitter.on("gameresults", (game: PublicGame) =>
+    websocketServer.to(game.id).emit("event", { event: "gameresults", game })
   );
 }
 
@@ -98,6 +102,8 @@ async function actionHandler(socketId: string, data: any) {
       return nextRoundController(player, data);
     case "voteanswer":
       return voteForAnswerController(player, data);
+    case "displaygameresults":
+      return displayGameResultsController(player, data);
   }
 
   console.error("Unregistered route: " + data.action);

@@ -47,13 +47,18 @@ export const startGame = async (gameId: string) => {
   await startNextRound(gameId);
 };
 
+export const nextRoundAvailable = (game: Game) => {
+  const nextRound = game.rounds.find((round) => round.started !== true);
+  return nextRound;
+};
+
 export const startNextRound = async (gameId: string) => {
   const game = games.get(gameId);
   if (!game) {
     throw new Error("Game does not exist");
   }
 
-  const nextRound = game.rounds.find((round) => round.started !== true);
+  const nextRound = nextRoundAvailable(game);
   if (!nextRound) {
     throw new Error("No more rounds to play");
   }
@@ -134,6 +139,8 @@ export const saveAnswers = async (
     .map(getPlayer)
     .filter((player) => player && player.left !== true);
   if (round.answersReceivedCount === currentPlayers.length) {
+    game.roundsLeft--;
+    gameEventEmitter.emit("gameupdate", toPublicGame(game));
     gameEventEmitter.emit("roundresults", toPublicGame(game), round);
   }
 };

@@ -16,7 +16,11 @@ import {
   Game,
   PublicGame,
 } from "../../../../server/src/models/Game";
-import { nextRound, voteForAnswer } from "../../actions/game";
+import {
+  nextRound,
+  voteForAnswer,
+  displayGameResults,
+} from "../../actions/game";
 
 export function GameVote() {
   let { gameId } = useParams();
@@ -25,8 +29,8 @@ export function GameVote() {
   const roundResults = useSelector(selectRoundResults);
   const dispatch = useDispatch();
 
-  if (!game || !gameId || !roundResults) {
-    return <div>Unable to display results: gameId is not set</div>;
+  if (!game || !gameId || !roundResults || !game.creator) {
+    return <div>Unable to display results: game not loaded correctly</div>;
   }
 
   return (
@@ -37,14 +41,22 @@ export function GameVote() {
         ResultCategory(game, category, roundResults)
       )}
 
-      {playerId !== game.creator?.id ? undefined : (
+      {playerId === game.creator.id && game.roundsLeft > 0 ? (
         <button
           className="primary"
           onClick={() => dispatch(nextRound(game.id))}
         >
           Next round
         </button>
-      )}
+      ) : undefined}
+      {playerId === game.creator.id && game.roundsLeft === 0 ? (
+        <button
+          className="primary"
+          onClick={() => dispatch(displayGameResults(game.id))}
+        >
+          Display results
+        </button>
+      ) : undefined}
     </div>
   );
 }

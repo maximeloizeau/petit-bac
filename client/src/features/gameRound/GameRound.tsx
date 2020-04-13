@@ -19,7 +19,7 @@ export function GameRound() {
   const answers = useSelector(selectAnswers);
   const dispatch = useDispatch();
 
-  if (round?.ended || true) {
+  if (round?.ended) {
     return <Loading />;
   }
 

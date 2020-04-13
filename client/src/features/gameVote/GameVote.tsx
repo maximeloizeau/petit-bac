@@ -22,6 +22,7 @@ import {
   displayGameResults,
 } from "../../actions/game";
 import { formatGameId } from "../../utils/formatGameId";
+import { Loading } from "../loading/Loading";
 
 export function GameVote() {
   let { gameId } = useParams();
@@ -37,7 +38,7 @@ export function GameVote() {
   }
 
   if (game.state === "round-starting") {
-    return <div>{countdownTimer}</div>;
+    return <div><h1>Chargement du round</h1>{countdownTimer}<Loading /></div>;
   }
 
   const vote = (
@@ -47,8 +48,8 @@ export function GameVote() {
     playerId: string
   ) =>
     dispatch(voteForAnswer(game.id, roundId, categoryId, playerId, voteValue));
-  const voteYes = () => vote.bind(null, true);
-  const voteNo = () => vote.bind(null, false);
+  const voteYes = vote.bind(null, true);
+  const voteNo = vote.bind(null, false);
 
   return (
     <div>

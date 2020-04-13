@@ -3,15 +3,15 @@ import { useParams, Link } from "react-router-dom";
 import "../../App.css";
 import { useSelector } from "react-redux";
 import { selectGame } from "../../app/game";
+import { formatGameId } from "../../utils/formatGameId";
 
 export function GameResults() {
   let { gameId } = useParams();
   const game = useSelector(selectGame);
 
-  console.log(JSON.stringify(game));
   return (
     <div>
-      <h1>Game {gameId}</h1>
+      <h1>Game {formatGameId(gameId)}</h1>
 
       {game?.scoreboard.map((score, i) => {
         let boxClass;

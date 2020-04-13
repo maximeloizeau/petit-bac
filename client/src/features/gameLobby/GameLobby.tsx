@@ -7,10 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectGame, selectPlayerId } from "../../app/game";
 import { startGame } from "../../actions/game";
 import { Loading } from "../loading/Loading";
-
-function formatGameId(gameId: string) {
-  return gameId.split("-")[0];
-}
+import { formatGameId } from "../../utils/formatGameId";
 
 export function GameLobby() {
   let { gameId } = useParams();
@@ -23,7 +20,7 @@ export function GameLobby() {
   }, []);
 
   if (!game) {
-    return <Loading />
+    return <Loading />;
   }
 
   if (gameId !== game.id) {

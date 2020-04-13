@@ -21,6 +21,7 @@ import {
   voteForAnswer,
   displayGameResults,
 } from "../../actions/game";
+import { formatGameId } from "../../utils/formatGameId";
 
 export function GameVote() {
   let { gameId } = useParams();
@@ -35,7 +36,7 @@ export function GameVote() {
 
   return (
     <div>
-      <h1>Game {gameId}</h1>
+      <h1>Game {formatGameId(gameId)}</h1>
 
       {game.categories.map((category) =>
         ResultCategory(game, category, roundResults)
@@ -70,7 +71,6 @@ function ResultCategory(
     selectCategoryVoteAnswers(state as any, category.id)
   );
 
-  console.log("render");
   return (
     <div key={"results" + category.id}>
       <div className="twoBoxes">

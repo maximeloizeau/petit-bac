@@ -138,7 +138,8 @@ export const saveAnswers = async (
   const currentPlayers = game.playerIds
     .map(getPlayer)
     .filter((player) => player && player.left !== true);
-  if (round.answersReceivedCount === currentPlayers.length) {
+
+  if (round.answersReceivedCount >= currentPlayers.length) {
     game.roundsLeft--;
     gameEventEmitter.emit("gameupdate", toPublicGame(game));
     gameEventEmitter.emit("roundresults", toPublicGame(game), round);

@@ -1,4 +1,5 @@
 import {
+  Round,
   Game,
   Player,
   toPublicGame,

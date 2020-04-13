@@ -1,7 +1,7 @@
 .rowResult {
   display: flex;
   flex-direction: column;
-  border-bottom: solid 2px blue;
+  border-bottom: solid 2px #4451F5;
   padding: 20px 0;
 }
 

@@ -4,6 +4,8 @@
   max-width: 992px;
   margin: auto;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-logo {
@@ -45,6 +47,7 @@
 .container {
   margin: auto;
   padding: 5% 10% 5% 10%;
+  flex: 1 0 auto;
 }
 
 h1 {
@@ -236,8 +239,9 @@ label {
 
 footer {
   text-align: center;
-  padding: 20px;
   color: white;
+  height: 50px;
+  flex-shrink: 0;
 }
 
 @media only screen and (max-width: 768px) {

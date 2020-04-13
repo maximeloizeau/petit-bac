@@ -7,15 +7,13 @@ import {
   selectPlayerId,
   selectGame,
   selectRoundResults,
-  selectCategoryVoteAnswers,
-  selectAnswers,
   selectVoteAnswers,
+  selectCountdown,
 } from "../../app/game";
 import {
   Round,
   Category,
   PlayerAnswer,
-  Game,
   PublicGame,
 } from "../../../../server/src/models/Game";
 import {
@@ -29,12 +27,17 @@ export function GameVote() {
   let { gameId } = useParams();
   const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
+  const countdownTimer = useSelector(selectCountdown);
   const roundResults = useSelector(selectRoundResults);
   const answers = useSelector(selectVoteAnswers);
   const dispatch = useDispatch();
 
   if (!game || !gameId || !roundResults || !game.creator || !answers) {
     return <div>Unable to display results: game not loaded correctly</div>;
+  }
+
+  if (game.state === "round-starting") {
+    return <div>{countdownTimer}</div>;
   }
 
   const vote = (

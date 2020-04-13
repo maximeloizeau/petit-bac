@@ -57,6 +57,13 @@ export default function websocketApp(server: Server) {
   gameEventEmitter.on("gameresults", (game: PublicGame) =>
     websocketServer.to(game.id).emit("event", { event: "gameresults", game })
   );
+  gameEventEmitter.on(
+    "countdownupdate",
+    (game: PublicGame, countdownValue: number) =>
+      websocketServer
+        .to(game.id)
+        .emit("event", { event: "countdownupdate", countdownValue })
+  );
 }
 
 async function connectionHandler(socket: Socket) {

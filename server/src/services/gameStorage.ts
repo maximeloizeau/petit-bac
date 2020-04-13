@@ -71,19 +71,40 @@ export const startNextRound = async (gameId: string) => {
     throw new Error("No more rounds to play");
   }
 
+  game.state = GameState.RoundStarting;
+
+  gameEventEmitter.emit("gameupdate", toPublicGame(game));
+
+  let countdownValue = 5;
+  const countdownSchedule: NodeJS.Timeout = setInterval(() => {
+    if (countdownValue <= 0) {
+      openRound(game, nextRound);
+      clearInterval(countdownSchedule);
+      return;
+    }
+
+    gameEventEmitter.emit(
+      "countdownupdate",
+      toPublicGame(game),
+      --countdownValue
+    );
+  }, 1000);
+};
+
+export const openRound = async (game: Game, round: Round) => {
   game.state = GameState.RoundInProgress;
-  nextRound.started = true;
+  round.started = true;
 
   gameEventEmitter.emit(
     "roundstarted",
     toPublicGame(game),
-    toPublicRound(nextRound)
+    toPublicRound(round)
   );
 
   let timerValue = game.rules.roundDuration;
   const timerSchedule: NodeJS.Timeout = setInterval(() => {
     if (timerValue <= 0) {
-      closeRound(gameId, nextRound.id);
+      closeRound(game.id, round.id);
       clearInterval(timerSchedule);
       return;
     }

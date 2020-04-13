@@ -4,15 +4,26 @@ import styles from "./GameLobby.module.css";
 import "../../App.css";
 import { sendAction } from "../../websocket";
 import { useSelector, useDispatch } from "react-redux";
-import { selectGame, selectPlayerId } from "../../app/game";
+import { selectGame, selectPlayerId, selectCountdown } from "../../app/game";
 import { startGame } from "../../actions/game";
 import { Loading } from "../loading/Loading";
 import { formatGameId } from "../../utils/formatGameId";
+
+function playerSlots(playerList: any[], slotCount: number) {
+  let slots = [];
+  let slotNumber = 0;
+  while (slotNumber < slotCount) {
+    slots.push(playerList[slotNumber] || undefined);
+    slotNumber++;
+  }
+  return slots;
+}
 
 export function GameLobby() {
   let { gameId } = useParams();
   const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
+  const countdownTimer = useSelector(selectCountdown);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,14 +38,12 @@ export function GameLobby() {
     return <div>"Invalid state"</div>;
   }
 
-  const numberOfSlots = 8;
-
-  let playerList = [];
-  let slotNumber = 0;
-  while (slotNumber < numberOfSlots) {
-    playerList.push(game.players[slotNumber] || undefined);
-    slotNumber++;
+  if (game.state === "round-starting") {
+    return <div>{countdownTimer}</div>;
   }
+
+  const numberOfSlots = 8;
+  const playerList = playerSlots(game.players, numberOfSlots);
 
   return (
     <div>

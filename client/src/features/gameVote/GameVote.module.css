@@ -24,6 +24,11 @@
   margin-right: 40px;
 }
 
+.iconResult {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
 .player {
   font-weight: bold;
   color: #4451f5;

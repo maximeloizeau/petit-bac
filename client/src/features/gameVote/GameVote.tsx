@@ -22,6 +22,7 @@ import {
   displayGameResults,
 } from "../../actions/game";
 import { formatGameId } from "../../utils/formatGameId";
+import { Loading } from "../loading/Loading";
 
 export function GameVote() {
   let { gameId } = useParams();
@@ -37,7 +38,7 @@ export function GameVote() {
   }
 
   if (game.state === "round-starting") {
-    return <div>{countdownTimer}</div>;
+    return <div className="container center"><h3 className="loading-title">Chargement du round...</h3><Loading /></div>;
   }
 
   const vote = (
@@ -47,8 +48,8 @@ export function GameVote() {
     playerId: string
   ) =>
     dispatch(voteForAnswer(game.id, roundId, categoryId, playerId, voteValue));
-  const voteYes = () => vote.bind(null, true);
-  const voteNo = () => vote.bind(null, false);
+  const voteYes = vote.bind(null, true);
+  const voteNo = vote.bind(null, false);
 
   return (
     <div>
@@ -134,7 +135,13 @@ function PlayerAnswerLine(
         <label className={styles.player}>{playerName}</label>
         <div className={styles.rowActions}>
           <div className={styles.votes}>
-            <span className={styles.result}>{answer.answer}</span>
+          {answer?.answer ?
+            <span className={styles.result}>
+                <i className={`fa fa-bolt ${styles.iconResult} `}></i>
+                {answer?.answer}
+            </span>
+          : "💩"
+          }
           </div>
           <div className={styles.votes}>
             <div className={styles.rounds}>

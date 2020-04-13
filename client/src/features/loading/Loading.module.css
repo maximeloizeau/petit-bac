@@ -9,53 +9,8 @@
   right: 0;
 }
 
-.loader {
-  height: 80px;
-  margin: auto;
-  position: relative;
-}
 
-.image {
-  width: 100%;
-  text-align: center;
-  animation: rotate 5s infinite;
-  position: absolute;
-  display: flex;
-  justify-content: center;
-}
 
-.icon {
-    font-size: 100px;
-    color: #EFD66B;
-}
-
-.small {
-    font-size: 60px;
-}
-
-@keyframes rotate{
-    0% {
-      transform: rotate(360deg);
-      height: 0;
-    }
-    10% {
-      opacity: 0;
-    }
-    35% {
-      transform: rotate(0deg);
-      opacity: 1;
-    }
-    65% {
-      transform: rotate(0deg);
-      opacity: 1;
-    }
-    80% {
-      opacity: 0;
-    }
-    100% {
-      transform: rotate(-360deg);
-    }
-}
 
 * { box-sizing: border-box; }
 

@@ -248,7 +248,7 @@ button.secondary:active {
   background-color: white;
   border-radius: 20px;
   margin-top: 40px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   padding: 40px;
   text-align: left;
 }
@@ -310,13 +310,18 @@ footer {
 
 
 .accordeon {
-  background-color: #efd66b;
+  background-color: white;
   padding: 10px 40px;
   border-radius: 20px;
   display: flex;
+  flex-direction: column;
+  color: #4451f5;
+}
+
+.accordeon-title {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #4451f5;
   cursor: pointer;
 }
 
@@ -326,4 +331,24 @@ footer {
 
 .accordeon.open > .rules {
   display: block;
+  text-align: left;
+}
+
+.loading-title {
+  display: flex;
+  margin-top: 40%;
+  align-items: center;
+  justify-content: center;
+  color: #efd66b;
+
+}
+
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
 }

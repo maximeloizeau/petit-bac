@@ -20,7 +20,7 @@ function playerSlots(playerList: any[], slotCount: number) {
 }
 
 function shareLink (url: string) {
-  const hello = "Rejoins moi pour une partie sur Graduator: "
+  const hello = "Rejoins moi pour une partie sur Graduo: "
   const text = encodeURIComponent(hello + " " + url );
   const whatsappUrl = "https://api.whatsapp.com/send?phone=&text=" + text + "&source=&data=&app_absent=";
   return whatsappUrl;
@@ -50,13 +50,14 @@ export function GameLobby() {
   }
 
   if (game.state === "round-starting") {
-    return <div>{countdownTimer}</div>;
+    return <div className="container center"><h3 className="loading-title">Chargement du round...</h3><Loading /></div>;
   }
 
   const numberOfSlots = 8;
   const playerList = playerSlots(game.players, numberOfSlots);
 
   const lobbyUrl = window.location.href;
+
   return (
     <div>
       <div className={styles.headerLobby}>
@@ -69,7 +70,7 @@ export function GameLobby() {
       <div className="box">
         <div className="subBox">
           <label>Joueurs</label>
-          <span>{numberOfSlots}</span>
+          <span>{game.players.length}/{numberOfSlots}</span>
         </div>
         <div className="subBox">
           <label>Categories</label>
@@ -106,7 +107,6 @@ export function GameLobby() {
           Commencer la partie
         </button>
       )}
-      <button className="secondary" onClick={() => copyToClipboard(lobbyUrl)}>Copier le lien</button>
     </div>
   );
 }

@@ -46,3 +46,80 @@
     }
 }
 
+* { box-sizing: border-box; }
+
+.scene {
+  width: 100px;
+  height: 100px;
+  /* border: 1px solid #CCC; */
+  margin: 40px;
+  perspective: 300px;
+}
+
+.cube {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: translateZ(-100px);
+  transition: transform 1.3s;
+}
+.cube.showfront1  { transform: translateZ(-50px) rotateY(   0deg); }
+.cube.showfront2  { transform: translateZ(20px) rotateY(   0deg); }
+.cube.showright  { transform: translateZ(20px) rotateY( -90deg); }
+.cube.showback   { transform: translateZ(-50px) rotateY(-180deg); }
+.cube.showleft   { transform: translateZ(-80px) rotateY(  90deg); }
+.cube.showtop    { transform: translateZ(-50px) rotateX( -90deg); }
+.cube.showbottom { transform: translateZ(50px) rotateX(  90deg); }
+
+.cubeface {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 2px solid #4451F5;
+  line-height: 100px;
+  font-size: 40px;
+  font-weight: bold;
+  color: #4451F5;
+  text-align: center;
+  border-style: dashed;
+}
+
+.cubefacefront  { background: rgba(240, 218, 20, 0.9); }
+.cubefaceright  { background: rgba(240, 218, 20, 0.9); }
+.cubefaceback   { background: rgba(240, 218, 20, 0.9); }
+.cubefaceleft   { background: rgba(240, 218, 20, 0.9); }
+.cubefacetop    { background: rgba(240, 218, 20, 0.9); }
+.cubefacebottom { background: rgba(240, 218, 20, 0.9); }
+
+.cubefacefront  { transform: rotateY(  0deg) translateZ(50px); }
+.cubefaceright  { transform: rotateY( 90deg) translateZ(50px); }
+.cubefaceback   { transform: rotateY(180deg) translateZ(50px); }
+.cubefaceleft   { transform: rotateY(-90deg) translateZ(50px); }
+.cubefacetop    { transform: rotateX( 90deg) translateZ(50px); }
+.cubefacebottom { transform: rotateX(-90deg) translateZ(50px); }
+
+
+@keyframes rotate{
+  0% {
+    transform: rotate(360deg);
+    height: 0;
+  }
+  10% {
+    opacity: 0;
+  }
+  35% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  65% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}

@@ -38,38 +38,36 @@
 
 .action {
   height: 40px;
+  width: 40px;
   background-color: transparent;
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  border-radius: 50%;
 }
 
 .action.approve {
-  margin-right: 20px;
-  border: solid 2px #1aee2a;
-  color: #1aee2a;
+  border: none;
   font-size: 16px;
 }
 
 .action:hover.approve {
-  margin-right: 20px;
-  border: solid 2px #1aee2a;
+  border: none;
   color: white;
   font-size: 16px;
-  background-color: #1aee2a;
+  background-color: #f0f0f0;
 }
 
 .action.disapprove {
-  border: solid 2px red;
-  color: red;
+  border: none;
   font-size: 16px;
 }
 
 .action:hover.disapprove {
-  border: solid 2px red;
+  border: none;
   color: white;
   font-size: 16px;
-  background: red;
+  background: #f0f0f0;
 }
 
 .votes {

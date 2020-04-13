@@ -13,6 +13,8 @@ import {
   Round,
   Category,
   PlayerAnswer,
+  Game,
+  PublicGame,
 } from "../../../../server/src/models/Game";
 import { nextRound, voteForAnswer } from "../../actions/game";
 
@@ -32,7 +34,7 @@ export function GameVote() {
       <h1>Game {gameId}</h1>
 
       {game.categories.map((category) =>
-        ResultCategory(game.id, category, roundResults)
+        ResultCategory(game, category, roundResults)
       )}
 
       {playerId !== game.creator?.id ? undefined : (
@@ -48,7 +50,7 @@ export function GameVote() {
 }
 
 function ResultCategory(
-  gameId: string,
+  game: PublicGame,
   category: Category,
   roundResults: Round
 ) {
@@ -74,24 +76,36 @@ function ResultCategory(
         </div>
       </div>
       {playerAnswers.map((answer) =>
-        PlayerAnswerLine(gameId, roundResults.id, category.id, answer)
+        PlayerAnswerLine(game, roundResults.id, category.id, answer)
       )}
     </div>
   );
 }
 
 function PlayerAnswerLine(
-  gameId: string,
+  game: PublicGame,
   roundId: string,
   categoryId: string,
   answer: PlayerAnswer
 ) {
-  console.log(categoryId, answer.ratings);
   const dispatch = useDispatch();
+
+  const vote = (voteValue: boolean) =>
+    dispatch(
+      voteForAnswer(game.id, roundId, categoryId, answer.playerId, voteValue)
+    );
+  const voteYes = () => vote(true);
+  const voteNo = () => vote(false);
+
+  const player = game.players.find(
+    (player) => player && player.id === answer.playerId
+  );
+  const playerName = (player && player.name) || "Player";
+
   return (
     <div className="form" key={answer.playerId + categoryId}>
       <div className={styles.rowResult}>
-        <label className={styles.player}>Player 1</label>
+        <label className={styles.player}>{playerName}</label>
         <div className={styles.rowActions}>
           <div className={styles.votes}>
             <span className={styles.result}>{answer.answer}</span>
@@ -109,35 +123,15 @@ function PlayerAnswerLine(
             </div>
             <button
               className={`${styles.approve} ${styles.action} `}
-              onClick={() =>
-                dispatch(
-                  voteForAnswer(
-                    gameId,
-                    roundId,
-                    categoryId,
-                    answer.playerId,
-                    true
-                  )
-                )
-              }
+              onClick={voteYes}
             >
-              Yes
+              👍
             </button>
             <button
               className={`${styles.disapprove} ${styles.action} `}
-              onClick={() =>
-                dispatch(
-                  voteForAnswer(
-                    gameId,
-                    roundId,
-                    categoryId,
-                    answer.playerId,
-                    false
-                  )
-                )
-              }
+              onClick={voteNo}
             >
-              No
+              👎
             </button>
           </div>
         </div>

@@ -3,22 +3,6 @@ import { useParams } from "react-router-dom";
 import styles from "./Loading.module.css";
 
 
-
-
-// function changeSide() {
-//   var cube = document.querySelector('.cube');
-//   var currentClass = '';
-  
-//   if (!cube) {
-//     return
-//   }
-//   if (currentClass) {
-//     cube.classList.remove(currentClass);
-//   }
-//   cube.classList.addAfter( showClass);
-//   currentClass = showClass;
-// }
-
 const rotation = [
   styles.showfront1,
   styles.showright,

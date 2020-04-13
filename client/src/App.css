@@ -58,7 +58,17 @@ h1 {
   margin-top: 0;
 }
 
-button.primary {
+h2 {
+  color: white;
+  font-weight: 800;
+  text-align: left;
+  margin-bottom: 40px;
+  font-size: 2em;
+  margin-top: 0;
+  color: #4451f5;
+}
+
+button.primary, .primary {
   background-color: #efd66b;
   border: solid 4px #efd66b;
   text-transform: uppercase;
@@ -81,6 +91,52 @@ button.primary:hover {
   background-color: #4451f5;
   color: #efd66b;
 }
+
+.shareLink.whatsapp, .shareLink.copy {
+  border: solid 2px #efd66b;
+  text-transform: uppercase;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 700;
+  color: #efd66b;
+  outline: 0;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  text-transform: inherit;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  background: none;
+  width: fit-content;
+  padding: 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  line-height: 36px;
+}
+
+.shareLink.copy:active {
+  transform: translateY(-4px);
+  background-color: #4451f5;
+  color: #efd66b;
+}
+
+
+.shareLink:hover, .shareLink.copy:hover {
+  background-color: #efd66b;
+  color: #4451f5;
+}  
+
+.fa-whatsapp {
+  font-size: 18px;
+  margin-right: 10px;
+}
+
 
 button.secondary {
   background-color: #4451f5;
@@ -109,7 +165,6 @@ button.secondary:hover {
 
 button.secondary:active {
   transform: translateY(-4px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   background-color: #4451f5;
   color: #efd66b;
 }
@@ -192,7 +247,7 @@ button.secondary:active {
 .form {
   background-color: white;
   border-radius: 20px;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 20px;
   padding: 40px;
   text-align: left;
@@ -251,4 +306,24 @@ footer {
     font-weight: 700;
     font-size: 30px;
   }
+}
+
+
+.accordeon {
+  background-color: #efd66b;
+  padding: 10px 40px;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #4451f5;
+  cursor: pointer;
+}
+
+.accordeon.close > .rules {
+  display: none;
+}
+
+.accordeon.open > .rules {
+  display: block;
 }

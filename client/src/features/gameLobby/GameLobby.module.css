@@ -1,4 +1,18 @@
+.headerLobby {
+    display: flex;
+    margin-bottom: 40px;
+    flex-direction: column;
+}
 
+.headerLobby > h1 {
+    margin-bottom: 0;
+}
+
+.shareLinks {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
 
 .players {
     display: grid;

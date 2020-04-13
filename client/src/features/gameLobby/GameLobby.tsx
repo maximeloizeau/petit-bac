@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectGame, selectPlayerId } from "../../app/game";
 import { startGame } from "../../actions/game";
 import { Loading } from "../loading/Loading";
+import { S_IRUSR } from "constants";
+
 
 function formatGameId(gameId: string) {
   return gameId.split("-")[0];
@@ -17,7 +19,7 @@ export function GameLobby() {
   const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     sendAction({ action: "joingame", gameId: gameId });
   }, []);
@@ -39,9 +41,27 @@ export function GameLobby() {
     slotNumber++;
   }
 
+  function shareLink () {
+    const url = window.location.href;
+    const hello = "Rejoins moi pour une partie sur Graduator: "
+    const text = encodeURIComponent(hello + " " + url );
+    const whatsappUrl = "https://api.whatsapp.com/send?phone=&text=" + text + "&source=&data=&app_absent=";
+    return whatsappUrl;
+  }
+
+  function copyToClipboard () {
+    return navigator.clipboard.writeText(window.location.href);
+  }
+
   return (
     <div>
-      <h1>Game {formatGameId(gameId)}</h1>
+      <div className={styles.headerLobby}>
+        <h1>Game {formatGameId(gameId)}</h1>
+        <div className={styles.shareLinks}>
+          <button className="shareLink copy" onClick={copyToClipboard}>Copier le lien</button>
+          <a className="shareLink whatsapp" href={shareLink()} target="_blank"><i className="fab fa-whatsapp"></i>Share on Whatsapp</a>
+        </div>
+      </div>
       <div className="box">
         <div className="subBox">
           <label>Joueurs</label>
@@ -82,7 +102,7 @@ export function GameLobby() {
           Commencer la partie
         </button>
       )}
-      <button className="secondary">Copier le lien</button>
+      <button className="secondary" onClick={copyToClipboard}>Copier le lien</button>
     </div>
   );
 }

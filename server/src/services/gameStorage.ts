@@ -126,10 +126,11 @@ export const saveAnswers = async (
     );
     if (!validCategory) continue;
 
+    const fillRating = answers[playerAnswerCategory] ? undefined : false;
     round.answers[playerAnswerCategory][playerIndex] = {
       answer: answers[playerAnswerCategory],
       playerId,
-      ratings: game.playerIds.map((_) => undefined),
+      ratings: game.playerIds.map((_) => fillRating),
     };
   }
 

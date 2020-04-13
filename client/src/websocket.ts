@@ -9,6 +9,9 @@ ws.on("close", (e: any) => {
   console.log("close ws connection: ", e.code, e.reason);
 });
 ws.on("connect", () => login(ws));
+ws.on("disconnect", () =>
+  alert("Disconnected from server - will attempt to reconnect now")
+);
 ws.on("event", onEvent);
 
 export function sendAction({

@@ -42,13 +42,21 @@ export const startGame = async (gameId: string) => {
     throw new Error("Game does not exist");
   }
 
-  game.state = GameState.InProgress;
+  game.state = GameState.Starting;
+  game.inProgress = true;
 
   await startNextRound(gameId);
 };
 
 export const nextRoundAvailable = (game: Game) => {
-  const nextRound = game.rounds.find((round) => round.started !== true);
+  const nextRoundIndex = game.currentRound + 1;
+
+  const nextRound = game.rounds[nextRoundIndex];
+  if (!nextRound) {
+    return undefined;
+  }
+
+  game.currentRound = nextRoundIndex;
   return nextRound;
 };
 
@@ -63,19 +71,42 @@ export const startNextRound = async (gameId: string) => {
     throw new Error("No more rounds to play");
   }
 
-  nextRound.started = true;
+  game.state = GameState.RoundStarting;
+
+  gameEventEmitter.emit("gameupdate", toPublicGame(game));
+
+  let countdownValue = 5;
+  const countdownSchedule: NodeJS.Timeout = setInterval(() => {
+    if (countdownValue <= 0) {
+      openRound(game, nextRound);
+      clearInterval(countdownSchedule);
+      return;
+    }
+
+    gameEventEmitter.emit(
+      "countdownupdate",
+      toPublicGame(game),
+      --countdownValue
+    );
+  }, 1000);
+};
+
+export const openRound = async (game: Game, round: Round) => {
+  game.state = GameState.RoundInProgress;
+  round.started = true;
 
   gameEventEmitter.emit(
     "roundstarted",
     toPublicGame(game),
-    toPublicRound(nextRound)
+    toPublicRound(round)
   );
 
   let timerValue = game.rules.roundDuration;
   const timerSchedule: NodeJS.Timeout = setInterval(() => {
     if (timerValue <= 0) {
-      closeRound(gameId, nextRound.id);
+      closeRound(game.id, round.id);
       clearInterval(timerSchedule);
+      return;
     }
 
     gameEventEmitter.emit("roundtimerupdate", toPublicGame(game), --timerValue);
@@ -93,6 +124,7 @@ export const closeRound = async (gameId: string, roundId: string) => {
     throw new Error("Round does not exist");
   }
 
+  game.state = GameState.RoundResult;
   round.ended = true;
 
   gameEventEmitter.emit("roundended", toPublicGame(game), toPublicRound(round));
@@ -126,10 +158,11 @@ export const saveAnswers = async (
     );
     if (!validCategory) continue;
 
+    const fillRating = answers[playerAnswerCategory] ? undefined : false;
     round.answers[playerAnswerCategory][playerIndex] = {
       answer: answers[playerAnswerCategory],
       playerId,
-      ratings: game.playerIds.map((_) => undefined),
+      ratings: game.playerIds.map((_) => fillRating),
     };
   }
 
@@ -138,7 +171,8 @@ export const saveAnswers = async (
   const currentPlayers = game.playerIds
     .map(getPlayer)
     .filter((player) => player && player.left !== true);
-  if (round.answersReceivedCount === currentPlayers.length) {
+
+  if (round.answersReceivedCount >= currentPlayers.length) {
     game.roundsLeft--;
     gameEventEmitter.emit("gameupdate", toPublicGame(game));
     gameEventEmitter.emit("roundresults", toPublicGame(game), round);
@@ -177,4 +211,16 @@ export function saveVote(
   playerAnswer.ratings[voterIndex] = vote;
 
   gameEventEmitter.emit("voteupdate", toPublicGame(game), round);
+}
+
+export async function getCurrentGame(
+  playerId: string
+): Promise<Game | undefined> {
+  for (const [_, game] of games.entries()) {
+    const gameInProgress =
+      game.playerIds.includes(playerId) && game.inProgress === true;
+    if (gameInProgress) {
+      return game;
+    }
+  }
 }

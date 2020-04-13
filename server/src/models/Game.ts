@@ -1,9 +1,9 @@
 import { getPlayer } from "../services/playerStorage";
 
 export const defaultRules = {
-  roundDuration: 5,
-  roundCount: 1,
-  categoriesCount: 2,
+  roundDuration: 90,
+  roundCount: 2,
+  categoriesCount: 7,
   playerLimit: 8,
 };
 
@@ -58,7 +58,11 @@ export interface GameRules {
 
 export enum GameState {
   WaitingLobby = "waiting-lobby",
-  InProgress = "in-progress",
+  Starting = "starting",
+  RoundStarting = "round-starting",
+  RoundInProgress = "round-in-progress",
+  RoundResult = "round-results",
+  GameResult = "game-results",
   Ended = "ended",
   Archived = "archived",
 }
@@ -87,8 +91,10 @@ export type PublicRound = Pick<Round, "id" | "letter" | "started" | "ended">;
 
 export interface Game {
   id: string;
+  inProgress: boolean;
   state: GameState;
   categories: Category[];
+  currentRound: number;
   rounds: Round[];
   roundsLeft: number;
   playerIds: string[];

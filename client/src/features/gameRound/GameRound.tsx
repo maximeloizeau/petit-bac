@@ -10,6 +10,7 @@ import {
   selectAnswers,
 } from "../../app/game";
 import { Loading } from "../loading/Loading";
+import { formatGameId } from "../../utils/formatGameId";
 
 export function GameRound() {
   let { gameId } = useParams();
@@ -25,7 +26,7 @@ export function GameRound() {
 
   return (
     <div>
-      <h1>Game {gameId}</h1>
+      <h1>Game {formatGameId(gameId)}</h1>
       <div className="twoBoxes">
         <div className="boxOne box">
           <div className="subBox center">

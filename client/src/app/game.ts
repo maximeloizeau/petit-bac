@@ -12,6 +12,7 @@ interface GameState {
   currentGame?: PublicGame;
   currentRound?: PublicRound;
   currentRoundTimer: number;
+  currentCountdown?: number;
   answers: {
     [key: string]: string;
   };
@@ -25,6 +26,7 @@ const initialState: GameState = {
   currentGame: undefined,
   currentRound: undefined,
   currentRoundTimer: 0,
+  currentCountdown: undefined,
   answers: {},
   roundResults: undefined,
   voteAnswers: {},
@@ -67,6 +69,9 @@ export const gameSlice = createSlice({
     ) => {
       state.answers[action.payload.categoryId] = action.payload.answer;
     },
+    updateCountdown: (state, action: PayloadAction<number>) => {
+      state.currentCountdown = action.payload;
+    },
   },
 });
 
@@ -78,6 +83,7 @@ export const {
   setPlayerId,
   updateTimer,
   updateAnwser,
+  updateCountdown,
 } = gameSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
@@ -91,7 +97,10 @@ export const selectRoundTimer = (state: RootState) =>
   state.game.currentRoundTimer;
 export const selectAnswers = (state: RootState) => state.game.answers;
 export const selectRoundResults = (state: RootState) => state.game.roundResults;
+export const selectVoteAnswers = (state: RootState) => state.game.voteAnswers;
 export const selectCategoryVoteAnswers = (state: RootState, category: string) =>
   (state.game.voteAnswers && state.game.voteAnswers[category]) || [];
+export const selectCountdown = (state: RootState) =>
+  state.game.currentCountdown;
 
 export default gameSlice.reducer;

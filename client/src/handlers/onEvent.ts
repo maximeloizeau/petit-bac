@@ -5,6 +5,7 @@ import {
   updateTimer,
   resetRound,
   setRoundResults,
+  updateCountdown,
 } from "../app/game";
 import { store } from "../app/store";
 import { sendAction } from "../websocket";
@@ -35,6 +36,10 @@ export function onEvent(eventData: { [key: string]: any }) {
 
     case "roundtimerupdate":
       store.dispatch(updateTimer(eventData.timerValue));
+      break;
+
+    case "countdownupdate":
+      store.dispatch(updateCountdown(eventData.countdownValue));
       break;
 
     case "roundended":
@@ -69,6 +74,11 @@ export function onEvent(eventData: { [key: string]: any }) {
     case "gameresults":
       store.dispatch(setGame(eventData.game));
       browserHistory.push(`/game/${eventData.game.id}/results`);
+      break;
+
+    case "joinfail":
+      alert(eventData.message);
+      browserHistory.push(`/`);
       break;
   }
 }

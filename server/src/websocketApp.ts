@@ -17,6 +17,7 @@ import { disconnectPlayer } from "./controllers/disconnectPlayer";
 import { nextRoundController } from "./controllers/nextRound";
 import { voteForAnswerController } from "./controllers/voteForAnwser";
 import { displayGameResultsController } from "./controllers/displayGameResults";
+import { updatePlayer } from "./services/playerStorage";
 
 export default function websocketApp(server: Server) {
   const websocketServer = socketIo(server);
@@ -56,6 +57,13 @@ export default function websocketApp(server: Server) {
   gameEventEmitter.on("gameresults", (game: PublicGame) =>
     websocketServer.to(game.id).emit("event", { event: "gameresults", game })
   );
+  gameEventEmitter.on(
+    "countdownupdate",
+    (game: PublicGame, countdownValue: number) =>
+      websocketServer
+        .to(game.id)
+        .emit("event", { event: "countdownupdate", countdownValue })
+  );
 }
 
 async function connectionHandler(socket: Socket) {
@@ -87,6 +95,10 @@ async function actionHandler(socketId: string, data: any) {
 
   const player = await socketToPlayer(socketId);
   console.log("action from player", player);
+
+  if (player.left) {
+    updatePlayer(player.id, { left: false });
+  }
 
   // Auth routes
   switch (data.action) {

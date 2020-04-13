@@ -1,5 +1,8 @@
 import { getSocketFromId, setUserInfo } from "../services/socketStorage";
-import { createPlayer } from "../services/playerStorage";
+import { createPlayer, getPlayer } from "../services/playerStorage";
+import { getCurrentGame } from "../services/gameStorage";
+import { toPublicGame, Game, GameState, toPublicRound } from "../models/Game";
+import { joinGameController } from "../controllers/joinGame";
 
 export async function loginController(
   socketId: string,
@@ -19,7 +22,8 @@ export async function loginController(
     return;
   }
 
-  const newUser = createPlayer(playerId, playerName);
+  const user =
+    (await getPlayer(playerId)) || (await createPlayer(playerId, playerName));
   await setUserInfo(socketId, playerId);
 
   socketData.socket.emit("event", {
@@ -27,4 +31,30 @@ export async function loginController(
     loggedIn: true,
     playerId,
   });
+
+  const currentGame = await getCurrentGame(playerId);
+  if (currentGame) {
+    await joinGameController(user, { gameId: currentGame.id });
+    sendGameState(socketData.socket, currentGame);
+  }
+}
+
+function sendGameState(socket: SocketIO.Socket, game: Game) {
+  console.log(game.state);
+  switch (game.state) {
+    case GameState.RoundInProgress:
+      socket.emit("event", {
+        event: "roundstarted",
+        game: toPublicGame(game),
+        round: toPublicRound(game.rounds[game.currentRound]),
+      });
+      break;
+    case GameState.RoundResult:
+      socket.emit("event", {
+        event: "roundresults",
+        game: toPublicGame(game),
+        round: game.rounds[game.currentRound],
+      });
+      break;
+  }
 }

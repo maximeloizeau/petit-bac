@@ -20,13 +20,13 @@ export function GameRound() {
   const answers = useSelector(selectAnswers);
   const dispatch = useDispatch();
 
-  if (round?.ended) {
+  if (round?.ended || !game) {
     return <Loading />;
   }
 
   return (
     <div>
-      <h1>Game {formatGameId(gameId)}</h1>
+      <h1>Round {game.currentRound + 1 } / {game.roundsLeft + game.currentRound} </h1>
       <div className="twoBoxes">
         <div className="boxOne box">
           <div className="subBox center">

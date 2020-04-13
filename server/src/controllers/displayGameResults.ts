@@ -43,9 +43,17 @@ export async function displayGameResultsController(
           (rating) => rating === false
         ).length;
 
+        let scoreIncrement;
         if (yesVotes > noVotes) {
-          playerScores[playerAnswer.playerId]++;
+          scoreIncrement = 2;
+        } else if (yesVotes === noVotes) {
+          scoreIncrement = 1;
+        } else {
+          scoreIncrement = 0;
         }
+
+        playerScores[playerAnswer.playerId] =
+          playerScores[playerAnswer.playerId] + scoreIncrement;
       });
     });
   });

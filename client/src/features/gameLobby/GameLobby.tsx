@@ -20,7 +20,7 @@ function playerSlots(playerList: any[], slotCount: number) {
 }
 
 function shareLink (url: string) {
-  const hello = "Rejoins moi pour une partie sur Graduator: "
+  const hello = "Rejoins moi pour une partie sur Graduo: "
   const text = encodeURIComponent(hello + " " + url );
   const whatsappUrl = "https://api.whatsapp.com/send?phone=&text=" + text + "&source=&data=&app_absent=";
   return whatsappUrl;
@@ -57,7 +57,7 @@ export function GameLobby() {
   const playerList = playerSlots(game.players, numberOfSlots);
 
   const lobbyUrl = window.location.href;
-  
+
   return (
     <div>
       <div className={styles.headerLobby}>

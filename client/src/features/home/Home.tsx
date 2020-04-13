@@ -14,7 +14,7 @@ export function Home() {
   return ( 
     <div className="container">
       <h1>
-      Welcome to graduator
+      Welcome to Graduo
       </h1>
       <div className={`accordeon ${closeState}`}>
         <div className="accordeon-title" onClick={toggleCloseState}> 

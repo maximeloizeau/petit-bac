@@ -91,6 +91,7 @@ export const selectRoundTimer = (state: RootState) =>
   state.game.currentRoundTimer;
 export const selectAnswers = (state: RootState) => state.game.answers;
 export const selectRoundResults = (state: RootState) => state.game.roundResults;
+export const selectVoteAnswers = (state: RootState) => state.game.voteAnswers;
 export const selectCategoryVoteAnswers = (state: RootState, category: string) =>
   (state.game.voteAnswers && state.game.voteAnswers[category]) || [];
 

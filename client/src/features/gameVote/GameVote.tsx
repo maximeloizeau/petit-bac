@@ -8,6 +8,8 @@ import {
   selectGame,
   selectRoundResults,
   selectCategoryVoteAnswers,
+  selectAnswers,
+  selectVoteAnswers,
 } from "../../app/game";
 import {
   Round,
@@ -28,18 +30,32 @@ export function GameVote() {
   const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
   const roundResults = useSelector(selectRoundResults);
+  const answers = useSelector(selectVoteAnswers);
   const dispatch = useDispatch();
 
-  if (!game || !gameId || !roundResults || !game.creator) {
+  if (!game || !gameId || !roundResults || !game.creator || !answers) {
     return <div>Unable to display results: game not loaded correctly</div>;
   }
+
+  const vote = (
+    voteValue: boolean,
+    roundId: string,
+    categoryId: string,
+    playerId: string
+  ) =>
+    dispatch(voteForAnswer(game.id, roundId, categoryId, playerId, voteValue));
+  const voteYes = () => vote.bind(null, true);
+  const voteNo = () => vote.bind(null, false);
 
   return (
     <div>
       <h1>Game {formatGameId(gameId)}</h1>
 
       {game.categories.map((category) =>
-        ResultCategory(game, category, roundResults)
+        ResultCategory(game, category, roundResults, answers[category.id], {
+          voteYes,
+          voteNo,
+        })
       )}
 
       {playerId === game.creator.id && game.roundsLeft > 0 ? (
@@ -65,12 +81,10 @@ export function GameVote() {
 function ResultCategory(
   game: PublicGame,
   category: Category,
-  roundResults: Round
+  roundResults: Round,
+  playerAnswers: PlayerAnswer[],
+  { voteYes, voteNo }: { voteYes: Function; voteNo: Function }
 ) {
-  const playerAnswers = useSelector((state) =>
-    selectCategoryVoteAnswers(state as any, category.id)
-  );
-
   return (
     <div key={"results" + category.id}>
       <div className="twoBoxes">
@@ -89,7 +103,11 @@ function ResultCategory(
       </div>
       {playerAnswers.map(
         (answer) =>
-          answer && PlayerAnswerLine(game, roundResults.id, category.id, answer)
+          answer &&
+          PlayerAnswerLine(game, roundResults.id, category.id, answer, {
+            voteYes,
+            voteNo,
+          })
       )}
     </div>
   );
@@ -99,17 +117,9 @@ function PlayerAnswerLine(
   game: PublicGame,
   roundId: string,
   categoryId: string,
-  answer: PlayerAnswer
+  answer: PlayerAnswer,
+  { voteYes, voteNo }: { voteYes: Function; voteNo: Function }
 ) {
-  const dispatch = useDispatch();
-
-  const vote = (voteValue: boolean) =>
-    dispatch(
-      voteForAnswer(game.id, roundId, categoryId, answer.playerId, voteValue)
-    );
-  const voteYes = () => vote(true);
-  const voteNo = () => vote(false);
-
   const player = game.players.find(
     (player) => player && player.id === answer.playerId
   );
@@ -136,13 +146,13 @@ function PlayerAnswerLine(
             </div>
             <button
               className={`${styles.approve} ${styles.action} `}
-              onClick={voteYes}
+              onClick={() => voteYes(roundId, categoryId, answer.playerId)}
             >
               👍
             </button>
             <button
               className={`${styles.disapprove} ${styles.action} `}
-              onClick={voteNo}
+              onClick={() => voteNo(roundId, categoryId, answer.playerId)}
             >
               👎
             </button>

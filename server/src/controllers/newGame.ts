@@ -42,8 +42,10 @@ export async function newGameController(player: Player, data: {}) {
 
   const gameDetails = {
     id: gameId,
+    inProgress: false,
     state: GameState.WaitingLobby,
     categories: selectedCategories,
+    currentRound: -1,
     rounds,
     roundsLeft: rounds.length,
     playerIds: [],

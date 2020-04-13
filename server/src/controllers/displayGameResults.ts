@@ -1,4 +1,4 @@
-import { Player, toPublicGame } from "../models/Game";
+import { Player, toPublicGame, GameState } from "../models/Game";
 import { getGame } from "../services/gameStorage";
 import { gameEventEmitter } from "../services/gameEventEmitter";
 
@@ -22,6 +22,9 @@ export async function displayGameResultsController(
   if (game.roundsLeft !== 0) {
     throw new Error("All rounds have not been completed");
   }
+
+  game.state = GameState.GameResult;
+  game.inProgress = false;
 
   const playerScores = game.playerIds.reduce(
     (scores, playerId) => ({

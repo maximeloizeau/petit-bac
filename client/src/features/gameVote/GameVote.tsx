@@ -15,6 +15,7 @@ import {
   Category,
   PlayerAnswer,
 } from "../../../../server/src/models/Game";
+import { nextRound } from "../../actions/game";
 
 export function GameVote() {
   let { gameId } = useParams();
@@ -31,6 +32,15 @@ export function GameVote() {
 
       {game?.categories.map((category) =>
         ResultCategory(category, roundResults)
+      )}
+
+      {playerId !== game?.creator?.id ? undefined : (
+        <button
+          className="primary"
+          onClick={() => gameId && dispatch(nextRound(gameId))}
+        >
+          Next round
+        </button>
       )}
     </div>
   );
@@ -69,8 +79,11 @@ function PlayerAnswerLine(categoryId: string, answer: PlayerAnswer) {
           <div className={styles.votes}>
             <span className={styles.result}>{answer.answer}</span>
             <div className={styles.rounds}>
-              {answer.ratings.map((rating) => (
-                <div className={`${styles.round} `}></div>
+              {answer.ratings.map((rating, i) => (
+                <div
+                  className={`${styles.round} `}
+                  key={i + "rating" + categoryId}
+                ></div>
               ))}
             </div>
           </div>

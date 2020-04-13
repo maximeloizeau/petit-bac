@@ -18,3 +18,11 @@ export function startGame(gameId: string) {
     type: ROUND_LOADING,
   };
 }
+
+export function nextRound(gameId: string) {
+  sendAction({ action: "nextround", gameId: gameId });
+
+  return {
+    type: ROUND_LOADING,
+  };
+}

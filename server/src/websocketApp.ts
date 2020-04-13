@@ -14,6 +14,7 @@ import { Game, PublicGame, Round, PublicRound } from "./models/Game";
 import { startGameController } from "./controllers/startGame";
 import { submitAnswersController } from "./controllers/submitAnswers";
 import { disconnectPlayer } from "./controllers/disconnectPlayer";
+import { nextRoundController } from "./controllers/nextRound";
 
 export default function websocketApp(server: Server) {
   const websocketServer = socketIo(server);
@@ -87,6 +88,8 @@ async function actionHandler(socketId: string, data: any) {
       return startGameController(player, data);
     case "submitanswers":
       return submitAnswersController(player, data);
+    case "nextround":
+      return nextRoundController(player, data);
   }
 
   console.error("Unregistered route: " + data.action);

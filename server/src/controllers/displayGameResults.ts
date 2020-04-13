@@ -23,7 +23,13 @@ export async function displayGameResultsController(
     throw new Error("All rounds have not been completed");
   }
 
-  const playerScores: { [key: string]: number } = {};
+  const playerScores = game.playerIds.reduce(
+    (scores, playerId) => ({
+      ...scores,
+      [playerId]: 0,
+    }),
+    {} as { [key: string]: number }
+  );
   game.rounds.forEach((round) => {
     Object.keys(round.answers).forEach((categoryId) => {
       round.answers[categoryId].forEach((playerAnswer) => {
@@ -33,9 +39,9 @@ export async function displayGameResultsController(
         const noVotes = playerAnswer.ratings.filter(
           (rating) => rating === false
         ).length;
+
         if (yesVotes > noVotes) {
-          playerScores[playerAnswer.playerId] =
-            (playerScores[playerAnswer.playerId] || 0) + 1;
+          playerScores[playerAnswer.playerId]++;
         }
       });
     });

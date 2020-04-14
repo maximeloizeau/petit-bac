@@ -5,9 +5,9 @@ import mainRouter from "./routes";
 
 const app = express();
 
-app.use("/static", serve("../client/build/static"));
+app.use("/static", serve(path.join(__dirname, "../../client/build/static")));
 app.use(function (req, res) {
-  const p = path.join(__dirname + "../../../client/build/index.html");
+  const p = path.join(__dirname, "../../client/build/index.html");
   res.sendfile(p);
 });
 

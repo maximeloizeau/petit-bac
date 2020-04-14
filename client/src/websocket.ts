@@ -1,7 +1,7 @@
 import socketIo from "socket.io-client";
 import { login } from "./handlers/login";
 import { onEvent } from "./handlers/onEvent";
-const host = "https://f9d5ad4e.ngrok.io"
+const host = window.location.host;
 
 // A new Websocket connection is initialized with the server
 const ws = socketIo(host);

@@ -8,7 +8,7 @@ export async function socketToPlayer(socketId: string): Promise<Player> {
     throw new Error("Socket unregistered");
   }
 
-  if (!socketData?.playerId) {
+  if (!socketData || !socketData.playerId) {
     throw new Error("Socket not logged in");
   }
 

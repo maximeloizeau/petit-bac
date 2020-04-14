@@ -1,0 +1,14 @@
+{
+  "name": "petit-bac-app",
+  "version": "1.1.0",
+  "description": "",
+  "main": "server/dist/server.js",
+  "scripts": {
+    "start": "node server/dist/server.js",
+    "heroku-postbuild": "./build.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {}
+}

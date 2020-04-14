@@ -9,3 +9,7 @@
 - [ ] Handle draw in scoreboard
 - [ ] Allow user to enter username
 - [ ] User registration 
+- [ ] User can vote for categories
+- [ ] User can create new category
+- [ ] Creator can select round duration
+- [ ] Creator can choose number of rounds

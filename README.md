@@ -7,3 +7,5 @@
 # TODO features
 
 - [ ] Handle draw in scoreboard
+- [ ] Allow user to enter username
+- [ ] User registration 

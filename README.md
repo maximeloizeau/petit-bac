@@ -13,3 +13,5 @@
 - [ ] User can create new category
 - [ ] Creator can select round duration
 - [ ] Creator can choose number of rounds
+- [ ] Remove duplicate letter in one game
+- [ ] Translate game 

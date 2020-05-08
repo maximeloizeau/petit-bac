@@ -1,6 +1,7 @@
 import { Player, Game, GameState } from "../models/Game";
 import { getSocketFromPlayerId } from "../services/socketStorage";
-import { getGame, addPlayer } from "../services/gameStorage";
+import { addPlayerToGame } from "../services/gameService";
+import { getGame } from "../services/gameStorage";
 
 export async function joinGameController(
   player: Player,
@@ -26,7 +27,7 @@ export async function joinGameController(
   }
 
   socketData.socket.join(gameId);
-  await addPlayer(gameId, player);
+  await addPlayerToGame(gameId, player);
 }
 
 function isValidJoin(gameInfo: Game | undefined, player: Player) {
@@ -49,5 +50,6 @@ function isValidJoin(gameInfo: Game | undefined, player: Player) {
     return true;
   }
 
+  console.log("Game state invalid to join", gameInfo);
   return false;
 }

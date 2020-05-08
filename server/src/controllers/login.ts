@@ -1,8 +1,8 @@
 import { getSocketFromId, setUserInfo } from "../services/socketStorage";
 import { createPlayer, getPlayer } from "../services/playerStorage";
-import { getCurrentGame } from "../services/gameStorage";
 import { toPublicGame, Game, GameState, toPublicRound } from "../models/Game";
 import { joinGameController } from "../controllers/joinGame";
+import { getCurrentGame } from "../services/gameService";
 
 export async function loginController(
   socketId: string,

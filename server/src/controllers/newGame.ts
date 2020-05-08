@@ -54,7 +54,7 @@ export async function newGameController(player: Player, data: {}) {
     rules,
   };
 
-  await saveGame(gameId, gameDetails);
+  const createdGame = await saveGame(gameId, gameDetails);
 
   const socketData = await getSocketFromPlayerId(player.id);
   if (socketData) {
@@ -62,7 +62,7 @@ export async function newGameController(player: Player, data: {}) {
 
     socketData.socket.emit("event", {
       event: "gamecreated",
-      game: await toPublicGame(gameDetails),
+      game: await toPublicGame(createdGame),
     });
   }
 }

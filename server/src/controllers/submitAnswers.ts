@@ -1,11 +1,5 @@
-import { Player, Game, GameState } from "../models/Game";
-import { getSocketFromPlayerId } from "../services/socketStorage";
-import {
-  getGame,
-  addPlayer,
-  startGame,
-  saveAnswers,
-} from "../services/gameStorage";
+import { Player } from "../models/Game";
+import { saveAnswers } from "../services/gameService";
 
 export async function submitAnswersController(
   player: Player,
@@ -22,8 +16,6 @@ export async function submitAnswersController(
   if (!gameId || !roundId || !answers) {
     throw new Error("Invalid game id or round id");
   }
-
-  const gameInfo = await getGame(gameId);
 
   await saveAnswers(player.id, gameId, roundId, answers);
 }

@@ -1,6 +1,6 @@
 import { Player, Game, GameState } from "../models/Game";
-import { getSocketFromPlayerId } from "../services/socketStorage";
-import { getGame, addPlayer, startGame } from "../services/gameStorage";
+import { getGame } from "../services/gameStorage";
+import { startGame } from "../services/gameService";
 
 export async function startGameController(
   player: Player,

@@ -1,11 +1,5 @@
 import { Player, Game, GameState } from "../models/Game";
-import { getSocketFromPlayerId } from "../services/socketStorage";
-import {
-  getGame,
-  addPlayer,
-  startGame,
-  startNextRound,
-} from "../services/gameStorage";
+import { startNextRound } from "../services/gameService";
 
 export async function nextRoundController(
   player: Player,

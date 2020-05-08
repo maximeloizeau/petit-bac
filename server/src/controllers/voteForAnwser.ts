@@ -1,12 +1,5 @@
-import { Player, Game, GameState } from "../models/Game";
-import { getSocketFromPlayerId } from "../services/socketStorage";
-import {
-  getGame,
-  addPlayer,
-  startGame,
-  startNextRound,
-  saveVote,
-} from "../services/gameStorage";
+import { Player } from "../models/Game";
+import { saveVote } from "../services/gameService";
 
 export async function voteForAnswerController(
   player: Player,

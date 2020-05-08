@@ -1,5 +1,5 @@
 import { Player, toPublicGame, GameState } from "../models/Game";
-import { getGame } from "../services/gameStorage";
+import { getGame, saveGame } from "../services/gameStorage";
 import { gameEventEmitter } from "../services/gameEventEmitter";
 
 export async function displayGameResultsController(
@@ -23,8 +23,10 @@ export async function displayGameResultsController(
     throw new Error("All rounds have not been completed");
   }
 
-  game.state = GameState.GameResult;
-  game.inProgress = false;
+  let updatedGame = await saveGame(gameId, {
+    state: GameState.GameResult,
+    inProgress: false,
+  });
 
   const playerScores = game.playerIds.reduce(
     (scores, playerId) => ({
@@ -65,5 +67,10 @@ export async function displayGameResultsController(
     }))
     .sort((a, b) => b.score - a.score);
 
-  gameEventEmitter.emit("gameresults", await toPublicGame(game));
+  updatedGame = await saveGame(gameId, {
+    rounds: game.rounds,
+    scoreboard: game.scoreboard,
+  });
+
+  gameEventEmitter.emit("gameresults", await toPublicGame(updatedGame));
 }

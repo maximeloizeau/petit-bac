@@ -1,60 +1,68 @@
 .headerLobby {
-    display: flex;
-    margin-bottom: 40px;
-    flex-direction: column;
+  display: flex;
+  margin-bottom: 40px;
+  flex-direction: column;
 }
 
 .headerLobby > h1 {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .shareLinks {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .players {
-    display: grid;
-    margin-top: 40px;
-    grid-gap: 40px;
-    grid-template-columns: repeat(2, 1fr); 
+  display: grid;
+  margin-top: 40px;
+  grid-gap: 40px;
+  grid-template-columns: repeat(2, 1fr);
 }
 
-.playerBox { 
-    background-color: white;
-    color: #4451F5;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 40px;
-    border-radius: 20px;
-    border: solid 2px white;
-    min-height: 92px;
+.playerBox {
+  background-color: white;
+  color: #4451f5;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+  border-radius: 20px;
+  border: solid 2px white;
+  min-height: 92px;
 }
 
-.playerBox.inactive{
-    background-color: #4451F5;
-    border-style: dashed;
+.playerBox.inactive {
+  background-color: #4451f5;
+  border-style: dashed;
 }
 
-.playerBox > label, .playerBox > span { 
-    text-align: left;
+.playerBox > label,
+.playerBox > span {
+  text-align: left;
 }
 
 .playerBox > label {
-    font-weight: 800;
-    font-size: 14px;
+  font-weight: 800;
+  font-size: 14px;
 }
 
 .playerBox > span {
-    font-weight: 700;
-    font-size: 32px;
-    margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 32px;
+  margin-bottom: 20px;
 }
 
+.playerBox > span.changePlayerName {
+  cursor: pointer;
+}
+
+.playerBox > span.changePlayerName:hover {
+  color: #efd66b;
+}
 
 @media only screen and (max-width: 768px) {
-    .players {
-        grid-template-columns: repeat(1, 1fr);
-    }
+  .players {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }

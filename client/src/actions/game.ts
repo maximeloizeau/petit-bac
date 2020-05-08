@@ -4,6 +4,7 @@ export const GAME_LOADING = "game-loading";
 export const ROUND_LOADING = "round-loading";
 export const VOTE_LOADING = "vote-loading";
 export const GAME_RESULTS_LOADING = "game-results-loading";
+export const CHANGE_NAME = "change-name";
 
 export function createNewGame() {
   sendAction({ action: "newgame" });
@@ -34,6 +35,14 @@ export function displayGameResults(gameId: string) {
 
   return {
     type: GAME_RESULTS_LOADING,
+  };
+}
+
+export function changeName(name: string, gameId: string) {
+  sendAction({ action: "changename", name, gameId });
+
+  return {
+    type: CHANGE_NAME,
   };
 }
 

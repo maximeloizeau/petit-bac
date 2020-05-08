@@ -310,12 +310,11 @@ footer {
 
 
 .accordeon {
-  background-color: white;
-  padding: 10px 40px;
-  border-radius: 20px;
   display: flex;
   flex-direction: column;
-  color: #4451f5;
+  color: white;
+  border-top: solid 1px;
+  border-bottom: solid 1px;
 }
 
 .accordeon-title {

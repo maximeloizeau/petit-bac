@@ -2,6 +2,14 @@ import { redis } from "./redisStorage";
 import { Player } from "../models/Game";
 import * as generate from "meaningful-string";
 
+function tryDecode(str: string) {
+  try {
+    return JSON.parse(str);
+  } catch (err) {
+    return str;
+  }
+}
+
 function playerStorageKey(playerId: string) {
   return `player:${playerId}`;
 }
@@ -15,9 +23,21 @@ function objectToRedisSetArgs(obj: {
   );
 }
 
-export async function getPlayer(id: string) {
+export async function getPlayer(id: string): Promise<Player> {
   const player = await redis.hgetall(playerStorageKey(id));
-  return player;
+
+  return Object.keys(player).reduce((decoded, key) => {
+    return {
+      ...decoded,
+      [key]: tryDecode(player[key]),
+    };
+  }, {} as Player);
+}
+
+export async function getAllPlayers() {
+  const keys = await redis.keys("player:*");
+  const players = await Promise.all(keys.map((key) => redis.hgetall(key)));
+  return players;
 }
 
 export async function createPlayer(id: string, playerName?: string) {

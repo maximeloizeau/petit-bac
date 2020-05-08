@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./GameVote.module.css";
 import "../../App.css";
@@ -23,15 +23,21 @@ import {
 } from "../../actions/game";
 import { formatGameId } from "../../utils/formatGameId";
 import { Loading } from "../loading/Loading";
+import { sendAction } from "../../websocket";
 
 export function GameVote() {
   let { gameId } = useParams();
   const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
-  const countdownTimer = useSelector(selectCountdown);
   const roundResults = useSelector(selectRoundResults);
   const answers = useSelector(selectVoteAnswers);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!game) {
+      sendAction({ action: "joingame", gameId: gameId });
+    }
+  }, []);
 
   if (!game || !gameId || !roundResults || !game.creator || !answers) {
     return <div>Unable to display results: game not loaded correctly</div>;

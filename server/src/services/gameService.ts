@@ -220,7 +220,9 @@ export async function saveVote(
     throw new Error("Category does not exist for this round");
   }
 
-  const playerAnswer = roundAnswers.find((a) => a.playerId === answerPlayerId);
+  const playerAnswer = roundAnswers.find(
+    (a) => a && a.playerId === answerPlayerId
+  );
   if (!playerAnswer) {
     throw new Error("Player did not player for this round");
   }

@@ -2,6 +2,14 @@ import { redis } from "./redisStorage";
 import { Game, Player, toPublicGame } from "../models/Game";
 import { gameEventEmitter } from "./gameEventEmitter";
 
+function tryDecode(str: string) {
+  try {
+    return JSON.parse(str);
+  } catch (err) {
+    return str;
+  }
+}
+
 function gameStorageKey(gameId: string) {
   return `game:${gameId}`;
 }
@@ -105,12 +113,25 @@ export const getGame = async (gameId: string): Promise<Game> => {
   const decodedGame = Object.keys(game).reduce(
     (decoded, key) => ({
       ...decoded,
-      [key]: JSON.parse(game[key]),
+      [key]: tryDecode(game[key]),
     }),
     { playerIds: playerList } as Game
   );
   return decodedGame;
 };
+
+export async function getAllGames() {
+  const transformKey = (redisKey: string) => {
+    const prefixLength = gameStorageKey("").length;
+    return redisKey.substr(prefixLength);
+  };
+
+  const keys = await redis.keys("game:*");
+  const games = await Promise.all(
+    keys.map((key) => getGame(transformKey(key)))
+  );
+  return games;
+}
 
 export const getPlayerGames = async (playerId: string): Promise<string[]> => {
   const games = await redis.smembers(playerGamesStorageKey(playerId));

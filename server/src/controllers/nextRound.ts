@@ -1,5 +1,6 @@
 import { Player, Game, GameState } from "../models/Game";
 import { startNextRound } from "../services/gameService";
+import { displayGameResultsController } from "./displayGameResults";
 
 export async function nextRoundController(
   player: Player,
@@ -9,5 +10,11 @@ export async function nextRoundController(
     throw new Error("Invalid game id");
   }
 
-  await startNextRound(gameId);
+  try {
+    await startNextRound(gameId);
+  } catch (err) {
+    if (err.message === "No more rounds to play") {
+      await displayGameResultsController(player, { gameId });
+    }
+  }
 }

@@ -64,6 +64,12 @@ export function onEvent(eventData: { [key: string]: any }) {
 
     case "roundresults":
       store.dispatch(setRoundResults(eventData.round));
+
+      const gameState = store.getState().game;
+      if (!gameState || !gameState.currentGame) {
+        store.dispatch(setGame(eventData.game));
+      }
+
       browserHistory.push(`/game/${eventData.game.id}/vote`);
       break;
 

@@ -18,6 +18,7 @@ import { nextRoundController } from "./controllers/nextRound";
 import { voteForAnswerController } from "./controllers/voteForAnwser";
 import { displayGameResultsController } from "./controllers/displayGameResults";
 import { updatePlayer } from "./services/playerStorage";
+import { changeNameController } from "./controllers/changeName";
 
 export default function websocketApp(server: Server) {
   const websocketServer = socketIo(server);
@@ -116,6 +117,8 @@ async function actionHandler(socketId: string, data: any) {
       return voteForAnswerController(player, data);
     case "displaygameresults":
       return displayGameResultsController(player, data);
+    case "changename":
+      return changeNameController(player, data);
   }
 
   console.error("Unregistered route: " + data.action);

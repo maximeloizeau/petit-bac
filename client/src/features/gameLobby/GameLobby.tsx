@@ -5,7 +5,7 @@ import "../../App.css";
 import { sendAction } from "../../websocket";
 import { useSelector, useDispatch } from "react-redux";
 import { selectGame, selectPlayerId, selectCountdown } from "../../app/game";
-import { startGame } from "../../actions/game";
+import { startGame, changeName } from "../../actions/game";
 import { Loading } from "../loading/Loading";
 import { formatGameId } from "../../utils/formatGameId";
 
@@ -19,10 +19,13 @@ function playerSlots(playerList: any[], slotCount: number) {
   return slots;
 }
 
-function shareLink (url: string) {
-  const hello = "Rejoins moi pour une partie sur Graduo: "
-  const text = encodeURIComponent(hello + " " + url );
-  const whatsappUrl = "https://api.whatsapp.com/send?phone=&text=" + text + "&source=&data=&app_absent=";
+function shareLink(url: string) {
+  const hello = "Rejoins moi pour une partie sur Graduo: ";
+  const text = encodeURIComponent(hello + " " + url);
+  const whatsappUrl =
+    "https://api.whatsapp.com/send?phone=&text=" +
+    text +
+    "&source=&data=&app_absent=";
   return whatsappUrl;
 }
 
@@ -34,9 +37,8 @@ export function GameLobby() {
   let { gameId } = useParams();
   const playerId = useSelector(selectPlayerId);
   const game = useSelector(selectGame);
-  const countdownTimer = useSelector(selectCountdown);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     sendAction({ action: "joingame", gameId: gameId });
   }, []);
@@ -50,8 +52,26 @@ export function GameLobby() {
   }
 
   if (game.state === "round-starting") {
-    return <div className="container center"><h3 className="loading-title">Chargement du round...</h3><Loading /></div>;
+    return (
+      <div className="container center">
+        <h3 className="loading-title">Chargement du round...</h3>
+        <Loading />
+      </div>
+    );
   }
+
+  const changeNamePrompt = (selectedPlayerId: string) => {
+    if (selectedPlayerId !== playerId) {
+      return;
+    }
+
+    const name = prompt("Change your name to?");
+    if (!name || !game.id) {
+      return;
+    }
+
+    dispatch(changeName(name, game.id));
+  };
 
   const numberOfSlots = 8;
   const playerList = playerSlots(game.players, numberOfSlots);
@@ -63,14 +83,27 @@ export function GameLobby() {
       <div className={styles.headerLobby}>
         <h1>Game {formatGameId(gameId)}</h1>
         <div className={styles.shareLinks}>
-          <button className="shareLink copy" onClick={() => copyToClipboard(lobbyUrl)}>Copier le lien</button>
-          <a className="shareLink whatsapp" href={shareLink(lobbyUrl)} target="_blank"><i className="fab fa-whatsapp"></i>Share on Whatsapp</a>
+          <button
+            className="shareLink copy"
+            onClick={() => copyToClipboard(lobbyUrl)}
+          >
+            Copier le lien
+          </button>
+          <a
+            className="shareLink whatsapp"
+            href={shareLink(lobbyUrl)}
+            target="_blank"
+          >
+            <i className="fab fa-whatsapp"></i>Share on Whatsapp
+          </a>
         </div>
       </div>
       <div className="box">
         <div className="subBox">
           <label>Joueurs</label>
-          <span>{game.players.length}/{numberOfSlots}</span>
+          <span>
+            {game.players.length}/{numberOfSlots}
+          </span>
         </div>
         <div className="subBox">
           <label>Categories</label>
@@ -87,7 +120,9 @@ export function GameLobby() {
             return (
               <div className={styles.playerBox} key={i}>
                 <label>Player {i + 1}</label>
-                <span>{player.name}</span>
+                <span onClick={() => changeNamePrompt(player.id)}>
+                  {player.name}
+                </span>
               </div>
             );
           }

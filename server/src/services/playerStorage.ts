@@ -26,8 +26,11 @@ export function updatePlayer(id: string, fields: Partial<Player>) {
   const player = users.get(id);
   if (!player) return;
 
-  users.set(id, {
+  const newPlayerDetails = {
     ...player,
     ...fields,
-  });
+  };
+  users.set(id, newPlayerDetails);
+
+  return newPlayerDetails;
 }

@@ -37,6 +37,25 @@ export const addPlayer = async (gameId: string, player: Player) => {
   return game;
 };
 
+export const removePlayer = async (gameId: string, player: Player) => {
+  const game = games.get(gameId);
+  if (!game) {
+    throw new Error("Game does not exist");
+  }
+
+  // Do not remove players after game started
+  if (game.state !== GameState.WaitingLobby) {
+    return game;
+  }
+
+  const playerIndex = game.playerIds.indexOf(player.id);
+  game.playerIds.splice(playerIndex, 1);
+
+  console.log(game.playerIds);
+  gameEventEmitter.emit("gameupdate", toPublicGame(game));
+  return game;
+};
+
 export const startGame = async (gameId: string) => {
   const game = games.get(gameId);
   if (!game) {
@@ -215,12 +234,14 @@ export function saveVote(
 }
 
 export async function getCurrentGame(
-  playerId: string
+  playerId: string,
+  inProgressOnly = true
 ): Promise<Game | undefined> {
   for (const [_, game] of games.entries()) {
-    const gameInProgress =
-      game.playerIds.includes(playerId) && game.inProgress === true;
-    if (gameInProgress) {
+    const playerInGame = game.playerIds.includes(playerId);
+    const inProgressFind = !inProgressOnly || game.inProgress === true;
+
+    if (playerInGame && inProgressFind) {
       return game;
     }
   }

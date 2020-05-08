@@ -1,5 +1,12 @@
 import { updatePlayer } from "../services/playerStorage";
+import { removePlayer, getCurrentGame } from "../services/gameStorage";
 
-export function disconnectPlayer(playerId: string) {
-  updatePlayer(playerId, { left: true });
+export async function disconnectPlayer(playerId: string) {
+  const updatedPlayer = await updatePlayer(playerId, { left: true });
+
+  const currentGame = await getCurrentGame(playerId, false);
+  if (currentGame) {
+    console.log("removing player");
+    await removePlayer(currentGame.id, updatedPlayer!);
+  }
 }

@@ -1,8 +1,6 @@
-import { createHandyClient } from "handy-redis";
+import { redis } from "./redisStorage";
 import { Player } from "../models/Game";
 import * as generate from "meaningful-string";
-
-const redis = createHandyClient();
 
 function playerStorageKey(playerId: string) {
   return `player:${playerId}`;

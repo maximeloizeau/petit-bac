@@ -1,15 +1,6 @@
-import { createHandyClient } from "handy-redis";
-import {
-  Round,
-  Game,
-  Player,
-  toPublicGame,
-  GameState,
-  toPublicRound,
-} from "../models/Game";
+import { redis } from "./redisStorage";
+import { Game, Player, toPublicGame } from "../models/Game";
 import { gameEventEmitter } from "./gameEventEmitter";
-
-const redis = createHandyClient();
 
 function gameStorageKey(gameId: string) {
   return `game:${gameId}`;
@@ -69,7 +60,6 @@ export const addPlayer = async (gameId: string, player: Player) => {
   ]);
   const updated = added === 1;
 
-  console.log("sending");
   updated &&
     gameEventEmitter.emit(
       "gameupdate",
@@ -112,7 +102,6 @@ export const getGame = async (gameId: string): Promise<Game> => {
     redis.smembers(playersKey),
   ]);
 
-  console.log("player list:", playerList);
   const decodedGame = Object.keys(game).reduce(
     (decoded, key) => ({
       ...decoded,
@@ -120,7 +109,6 @@ export const getGame = async (gameId: string): Promise<Game> => {
     }),
     { playerIds: playerList } as Game
   );
-  console.log("sending", decodedGame);
   return decodedGame;
 };
 

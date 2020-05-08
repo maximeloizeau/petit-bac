@@ -120,9 +120,17 @@ export function GameLobby() {
             return (
               <div className={styles.playerBox} key={i}>
                 <label>Player {i + 1}</label>
-                <span onClick={() => changeNamePrompt(player.id)}>
-                  {player.name}
-                </span>
+                {playerId === player.id ? (
+                  <span
+                    className={styles.changePlayerName}
+                    onClick={() => changeNamePrompt(player.id)}
+                    title="Change your name"
+                  >
+                    {player.name}
+                  </span>
+                ) : (
+                  <span>{player.name}</span>
+                )}
               </div>
             );
           }

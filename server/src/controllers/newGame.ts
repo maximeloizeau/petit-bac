@@ -62,7 +62,7 @@ export async function newGameController(player: Player, data: {}) {
 
     socketData.socket.emit("event", {
       event: "gamecreated",
-      game: toPublicGame(gameDetails),
+      game: await toPublicGame(gameDetails),
     });
   }
 }

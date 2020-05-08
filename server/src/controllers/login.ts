@@ -39,20 +39,20 @@ export async function loginController(
   }
 }
 
-function sendGameState(socket: SocketIO.Socket, game: Game) {
+async function sendGameState(socket: SocketIO.Socket, game: Game) {
   console.log(game.state);
   switch (game.state) {
     case GameState.RoundInProgress:
       socket.emit("event", {
         event: "roundstarted",
-        game: toPublicGame(game),
+        game: await toPublicGame(game),
         round: toPublicRound(game.rounds[game.currentRound]),
       });
       break;
     case GameState.RoundResult:
       socket.emit("event", {
         event: "roundresults",
-        game: toPublicGame(game),
+        game: await toPublicGame(game),
         round: game.rounds[game.currentRound],
       });
       break;

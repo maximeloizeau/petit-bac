@@ -1,13 +1,28 @@
+import { createHandyClient } from "handy-redis";
 import { Player } from "../models/Game";
 import * as generate from "meaningful-string";
 
-const users = new Map<string, Player>();
+const redis = createHandyClient();
 
-export function getPlayer(id: string) {
-  return users.get(id);
+function playerStorageKey(playerId: string) {
+  return `player:${playerId}`;
 }
 
-export function createPlayer(id: string, playerName?: string) {
+function objectToRedisSetArgs(obj: {
+  [key: string]: string | boolean | number;
+}) {
+  return Object.keys(obj).reduce(
+    (list, key) => list.concat([[key, String(obj[key])]]),
+    [] as [string, string][]
+  );
+}
+
+export async function getPlayer(id: string) {
+  const player = await redis.hgetall(playerStorageKey(id));
+  return player;
+}
+
+export async function createPlayer(id: string, playerName?: string) {
   let name;
   if (playerName) {
     name = playerName;
@@ -17,20 +32,26 @@ export function createPlayer(id: string, playerName?: string) {
 
   const userProfile = { id, name, left: false };
 
-  users.set(id, userProfile);
+  await redis.hset(playerStorageKey(id), ...objectToRedisSetArgs(userProfile));
 
   return userProfile;
 }
 
-export function updatePlayer(id: string, fields: Partial<Player>) {
-  const player = users.get(id);
-  if (!player) return;
+export async function updatePlayer(id: string, fields: Partial<Player>) {
+  const storageKey = playerStorageKey(id);
 
-  const newPlayerDetails = {
-    ...player,
-    ...fields,
-  };
-  users.set(id, newPlayerDetails);
+  const exists = await redis.exists(storageKey);
+  if (!exists) {
+    return;
+  }
 
-  return newPlayerDetails;
+  redis.hset(
+    storageKey,
+    ...objectToRedisSetArgs(
+      fields as { [key: string]: string | boolean | number }
+    )
+  );
+
+  const player = await redis.hgetall(storageKey);
+  return player;
 }

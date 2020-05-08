@@ -65,5 +65,5 @@ export async function displayGameResultsController(
     }))
     .sort((a, b) => b.score - a.score);
 
-  gameEventEmitter.emit("gameresults", toPublicGame(game));
+  gameEventEmitter.emit("gameresults", await toPublicGame(game));
 }

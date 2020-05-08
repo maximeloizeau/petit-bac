@@ -1,3 +1,4 @@
+import { createHandyClient } from "handy-redis";
 import {
   Round,
   Game,
@@ -8,6 +9,8 @@ import {
 } from "../models/Game";
 import { gameEventEmitter } from "./gameEventEmitter";
 import { getPlayer } from "./playerStorage";
+
+const redis = createHandyClient();
 
 const games = new Map<string, Game>();
 
@@ -27,13 +30,13 @@ export const addPlayer = async (gameId: string, player: Player) => {
   }
 
   if (game.playerIds.find((playerId: string) => playerId === player.id)) {
-    gameEventEmitter.emit("gameupdate", toPublicGame(game));
+    gameEventEmitter.emit("gameupdate", await toPublicGame(game));
     return game;
   }
 
   game.playerIds.push(player.id);
 
-  gameEventEmitter.emit("gameupdate", toPublicGame(game));
+  gameEventEmitter.emit("gameupdate", await toPublicGame(game));
   return game;
 };
 
@@ -52,7 +55,7 @@ export const removePlayer = async (gameId: string, player: Player) => {
   game.playerIds.splice(playerIndex, 1);
 
   console.log(game.playerIds);
-  gameEventEmitter.emit("gameupdate", toPublicGame(game));
+  gameEventEmitter.emit("gameupdate", await toPublicGame(game));
   return game;
 };
 
@@ -93,10 +96,10 @@ export const startNextRound = async (gameId: string) => {
 
   game.state = GameState.RoundStarting;
 
-  gameEventEmitter.emit("gameupdate", toPublicGame(game));
+  gameEventEmitter.emit("gameupdate", await toPublicGame(game));
 
   let countdownValue = 5;
-  const countdownSchedule: NodeJS.Timeout = setInterval(() => {
+  const countdownSchedule: NodeJS.Timeout = setInterval(async () => {
     if (countdownValue <= 0) {
       openRound(game, nextRound);
       clearInterval(countdownSchedule);
@@ -105,7 +108,7 @@ export const startNextRound = async (gameId: string) => {
 
     gameEventEmitter.emit(
       "countdownupdate",
-      toPublicGame(game),
+      await toPublicGame(game),
       --countdownValue
     );
   }, 1000);
@@ -117,19 +120,23 @@ export const openRound = async (game: Game, round: Round) => {
 
   gameEventEmitter.emit(
     "roundstarted",
-    toPublicGame(game),
+    await toPublicGame(game),
     toPublicRound(round)
   );
 
   let timerValue = game.rules.roundDuration;
-  const timerSchedule: NodeJS.Timeout = setInterval(() => {
+  const timerSchedule: NodeJS.Timeout = setInterval(async () => {
     if (timerValue <= 0) {
       closeRound(game.id, round.id);
       clearInterval(timerSchedule);
       return;
     }
 
-    gameEventEmitter.emit("roundtimerupdate", toPublicGame(game), --timerValue);
+    gameEventEmitter.emit(
+      "roundtimerupdate",
+      await toPublicGame(game),
+      --timerValue
+    );
   }, 1000);
 };
 
@@ -147,7 +154,11 @@ export const closeRound = async (gameId: string, roundId: string) => {
   game.state = GameState.RoundResult;
   round.ended = true;
 
-  gameEventEmitter.emit("roundended", toPublicGame(game), toPublicRound(round));
+  gameEventEmitter.emit(
+    "roundended",
+    await toPublicGame(game),
+    toPublicRound(round)
+  );
 };
 
 // TODO: extract outside storage
@@ -188,18 +199,18 @@ export const saveAnswers = async (
 
   round.answersReceivedCount++;
 
-  const currentPlayers = game.playerIds
-    .map(getPlayer)
-    .filter((player) => player && player.left !== true);
+  const currentPlayers = (
+    await Promise.all(game.playerIds.map(getPlayer))
+  ).filter((player) => player && player.left !== true); // TODO: rewrite this
 
   if (round.answersReceivedCount >= currentPlayers.length) {
     game.roundsLeft--;
-    gameEventEmitter.emit("gameupdate", toPublicGame(game));
-    gameEventEmitter.emit("roundresults", toPublicGame(game), round);
+    gameEventEmitter.emit("gameupdate", await toPublicGame(game));
+    gameEventEmitter.emit("roundresults", await toPublicGame(game), round);
   }
 };
 
-export function saveVote(
+export async function saveVote(
   voterId: string,
   gameId: string,
   roundId: string,
@@ -230,7 +241,7 @@ export function saveVote(
   const voterIndex = game.playerIds.indexOf(voterId);
   playerAnswer.ratings[voterIndex] = vote;
 
-  gameEventEmitter.emit("voteupdate", toPublicGame(game), round);
+  gameEventEmitter.emit("voteupdate", await toPublicGame(game), round);
 }
 
 export async function getCurrentGame(

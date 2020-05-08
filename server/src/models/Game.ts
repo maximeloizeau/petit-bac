@@ -1,8 +1,8 @@
 import { getPlayer } from "../services/playerStorage";
 
 export const defaultRules = {
-  roundDuration: 45,
-  roundCount: 3,
+  roundDuration: 15,
+  roundCount: 2,
   categoriesCount: 7,
   playerLimit: 8,
 };
@@ -105,20 +105,26 @@ export interface Game {
 
 export type PublicGame = Pick<
   Game,
-  "id" | "state" | "categories" | "rules" | "roundsLeft" | "scoreboard" |"currentRound"
+  | "id"
+  | "state"
+  | "categories"
+  | "rules"
+  | "roundsLeft"
+  | "scoreboard"
+  | "currentRound"
 > & {
   players: (Player | undefined)[];
   creator: Player | undefined;
 };
 
-export function toPublicGame(game: Game): PublicGame {
+export async function toPublicGame(game: Game): Promise<PublicGame> {
   return {
     id: game.id,
     state: game.state,
     categories: game.categories,
     currentRound: game.currentRound,
-    players: game.playerIds.map(getPlayer),
-    creator: getPlayer(game.creatorId),
+    players: await Promise.all(game.playerIds.map(getPlayer)),
+    creator: await getPlayer(game.creatorId),
     rules: game.rules,
     roundsLeft: game.roundsLeft,
     scoreboard: game.scoreboard,

@@ -23,5 +23,5 @@ export async function changeNameController(
   await updatePlayer(player.id, { name });
 
   const game = await getGame(gameId);
-  gameEventEmitter.emit("gameupdate", toPublicGame(game!));
+  gameEventEmitter.emit("gameupdate", await toPublicGame(game!));
 }

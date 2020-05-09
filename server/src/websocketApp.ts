@@ -95,6 +95,10 @@ async function actionHandler(socketId: string, data: any) {
   }
 
   const player = await socketToPlayer(socketId);
+  if (!player) {
+    throw new Error("User not logged in");
+  }
+
   console.log("action from player", player);
 
   if (player.left) {

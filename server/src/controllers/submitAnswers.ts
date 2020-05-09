@@ -1,5 +1,5 @@
 import { Player } from "../models/Game";
-import { saveAnswers } from "../services/gameService";
+import { savePlayerAnswers } from "../services/gameService";
 
 export async function submitAnswersController(
   player: Player,
@@ -17,5 +17,5 @@ export async function submitAnswersController(
     throw new Error("Invalid game id or round id");
   }
 
-  await saveAnswers(player.id, gameId, roundId, answers);
+  await savePlayerAnswers(player.id, gameId, roundId, answers);
 }

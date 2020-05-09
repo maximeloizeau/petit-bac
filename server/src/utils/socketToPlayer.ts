@@ -2,7 +2,9 @@ import { getSocketFromId } from "../services/socketStorage";
 import { Player } from "../models/Game";
 import { getPlayer } from "../services/playerStorage";
 
-export async function socketToPlayer(socketId: string): Promise<Player> {
+export async function socketToPlayer(
+  socketId: string
+): Promise<Player | undefined> {
   const socketData = await getSocketFromId(socketId);
   if (!socketId) {
     throw new Error("Socket unregistered");

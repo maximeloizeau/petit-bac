@@ -47,6 +47,7 @@ export async function newGameController(player: Player, data: {}) {
     categories: selectedCategories,
     currentRound: -1,
     rounds,
+    roundsIds: rounds.map((round) => round.id),
     roundsLeft: rounds.length,
     playerIds: [],
     creatorId: player.id,

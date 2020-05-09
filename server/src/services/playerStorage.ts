@@ -23,8 +23,11 @@ function objectToRedisSetArgs(obj: {
   );
 }
 
-export async function getPlayer(id: string): Promise<Player> {
+export async function getPlayer(id: string): Promise<Player | undefined> {
   const player = await redis.hgetall(playerStorageKey(id));
+  if (!player) {
+    return undefined;
+  }
 
   return Object.keys(player).reduce((decoded, key) => {
     return {

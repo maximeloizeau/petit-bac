@@ -68,7 +68,7 @@ export async function displayGameResultsController(
     .sort((a, b) => b.score - a.score);
 
   updatedGame = await saveGame(gameId, {
-    rounds: game.rounds,
+    // rounds: game.rounds, // TODO: check if we need to save rounds
     scoreboard: game.scoreboard,
   });
 

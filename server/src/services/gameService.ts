@@ -15,6 +15,11 @@ import {
   addPlayer,
   removePlayer,
   getPlayerGames,
+  saveRound,
+  saveAnswers,
+  saveRating,
+  getRound,
+  incrementRoundAnswerReceivedCount,
 } from "./gameStorage";
 
 export const addPlayerToGame = async (gameId: string, player: Player) => {
@@ -46,9 +51,7 @@ export const startGame = async (gameId: string) => {
   await startNextRound(gameId);
 };
 
-export const nextRoundAvailable = async (
-  game: Game
-): Promise<[Round | undefined, number]> => {
+export const nextRoundAvailable = (game: Game): [Round | undefined, number] => {
   const nextRoundIndex = game.currentRound + 1;
 
   const nextRound = game.rounds[nextRoundIndex];
@@ -65,7 +68,7 @@ export const startNextRound = async (gameId: string) => {
     throw new Error("Game does not exist");
   }
 
-  const [nextRound, nextRoundIndex] = await nextRoundAvailable(game);
+  const [nextRound, nextRoundIndex] = nextRoundAvailable(game);
   if (!nextRound) {
     throw new Error("No more rounds to play");
   }
@@ -129,20 +132,19 @@ export const closeRound = async (gameId: string, roundId: string) => {
     throw new Error("Round does not exist");
   }
 
-  round.ended = true; // TODO: rewrite to avoid mutating and only update round in redis
+  const updatedRound = await saveRound(gameId, roundId, { ended: true });
   const upToDateGame = await saveGame(gameId, {
     state: GameState.RoundResult,
-    rounds: game.rounds,
   });
 
   gameEventEmitter.emit(
     "roundended",
     await toPublicGame(upToDateGame),
-    toPublicRound(round)
+    toPublicRound(updatedRound)
   );
 };
 
-export const saveAnswers = async (
+export const savePlayerAnswers = async (
   playerId: string,
   gameId: string,
   roundId: string,
@@ -158,10 +160,6 @@ export const saveAnswers = async (
     throw new Error("Round does not exist");
   }
 
-  const playerIndex = game.playerIds.findIndex(
-    (pId: string) => pId === playerId
-  );
-
   for (const playerAnswerCategory of Object.keys(answers)) {
     const validCategory = Boolean(
       game.categories.find((c) => c.id === playerAnswerCategory)
@@ -169,30 +167,37 @@ export const saveAnswers = async (
     if (!validCategory) continue;
 
     const fillRating = answers[playerAnswerCategory] ? undefined : false;
-    round.answers[playerAnswerCategory][playerIndex] = {
+    await saveAnswers(gameId, roundId, playerAnswerCategory, playerId, {
       answer: answers[playerAnswerCategory],
-      playerId,
       ratings: game.playerIds.map((_) => fillRating),
-    };
+    });
   }
 
-  round.answersReceivedCount++;
+  const answersReceivedCount = await incrementRoundAnswerReceivedCount(
+    gameId,
+    roundId
+  );
 
-  let updatedGame = await saveGame(gameId, { rounds: game.rounds });
+  const updatedRound = await getRound(
+    gameId,
+    roundId,
+    game.categories.map((c) => c.id),
+    game.playerIds
+  );
 
   const currentPlayers = (
     await Promise.all(game.playerIds.map(getPlayer))
   ).filter((player) => player && player.left !== true); // TODO: rewrite this
 
-  if (round.answersReceivedCount >= currentPlayers.length) {
-    updatedGame = await saveGame(game.id, {
+  if (answersReceivedCount >= currentPlayers.length) {
+    let updatedGame = await saveGame(game.id, {
       roundsLeft: game.roundsLeft - 1,
     });
     gameEventEmitter.emit("gameupdate", await toPublicGame(updatedGame));
     gameEventEmitter.emit(
       "roundresults",
       await toPublicGame(updatedGame),
-      round
+      updatedRound
     );
   }
 };
@@ -227,12 +232,23 @@ export async function saveVote(
     throw new Error("Player did not player for this round");
   }
 
-  // TODO: rewrite this to have atomic operations
   const voterIndex = game.playerIds.indexOf(voterId);
-  playerAnswer.ratings[voterIndex] = vote;
+  await saveRating(
+    gameId,
+    roundId,
+    categoryId,
+    answerPlayerId,
+    voterIndex,
+    vote
+  );
 
-  const updatedGame = await saveGame(gameId, { rounds: game.rounds });
-  gameEventEmitter.emit("voteupdate", await toPublicGame(updatedGame), round);
+  const updatedRound = await getRound(
+    gameId,
+    roundId,
+    game.categories.map((c) => c.id),
+    game.playerIds
+  );
+  gameEventEmitter.emit("voteupdate", await toPublicGame(game), updatedRound);
 }
 
 export async function getCurrentGame(

@@ -1,7 +1,7 @@
 import { getPlayer } from "../services/playerStorage";
 
 export const defaultRules = {
-  roundDuration: 15,
+  roundDuration: 5,
   roundCount: 2,
   categoriesCount: 7,
   playerLimit: 8,
@@ -96,6 +96,7 @@ export interface Game {
   categories: Category[];
   currentRound: number;
   rounds: Round[];
+  roundsIds: string[];
   roundsLeft: number;
   playerIds: string[];
   scoreboard: { playerId: string; score: number }[];

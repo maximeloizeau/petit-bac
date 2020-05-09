@@ -1,8 +1,8 @@
 import { getPlayer } from "../services/playerStorage";
 
 export const defaultRules = {
-  roundDuration: 5,
-  roundCount: 2,
+  roundDuration: 90,
+  roundCount: 3,
   categoriesCount: 7,
   playerLimit: 8,
 };
